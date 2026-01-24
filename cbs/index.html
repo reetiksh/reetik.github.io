@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinCore | CBS Architecture v2.0</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <nav>
+        <div class="logo">FINCORE<span class="highlight">.CBS</span></div>
+        <div class="nav-links">
+            <a href="#architecture">Architecture</a>
+            <a href="#specs">Technical Specs</a>
+            <a href="#contact" class="btn-nav">Request Demo</a>
+        </div>
+    </nav>
+
+    <div class="visual-viewport">
+        <svg id="cbs-svg" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
+            <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <linearGradient id="server-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#2a2a35;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#15151a;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+
+            <g id="bg-grid" opacity="0.2">
+                <path d="M 0 400 L 1000 400" stroke="#444" stroke-width="1" />
+                <line x1="500" y1="0" x2="500" y2="800" stroke="#444" stroke-width="1" />
+                <circle cx="500" cy="400" r="300" fill="none" stroke="#444" stroke-dasharray="10,10" />
+            </g>
+
+            <path id="line-auth" d="M 200 200 L 450 350" stroke="#ff4757" stroke-width="2" opacity="0" fill="none" />
+            <path id="line-channels" d="M 800 200 L 550 350" stroke="#00d2ff" stroke-width="2" opacity="0" fill="none" />
+            <path id="line-db" d="M 500 500 L 500 650" stroke="#00e676" stroke-width="2" opacity="0" fill="none" />
+            <path id="line-analytics" d="M 500 300 L 500 100" stroke="#e056fd" stroke-width="2" opacity="0" fill="none" />
+
+            <g id="core-citadel" transform="translate(500, 400)">
+                <ellipse cx="0" cy="120" rx="80" ry="30" fill="#000" opacity="0.5" filter="url(#glow)"/>
+                
+                <path d="M -60 20 L 0 50 L 60 20 L 60 70 L 0 100 L -60 70 Z" fill="url(#server-grad)" stroke="#00d2ff" stroke-width="2" />
+                <path d="M -60 -20 L 0 10 L 60 -20 L 60 30 L 0 60 L -60 30 Z" fill="url(#server-grad)" stroke="#00d2ff" stroke-width="2" />
+                <path d="M -60 -60 L 0 -30 L 60 -60 L 0 -90 Z" fill="#1a1a24" stroke="#00d2ff" stroke-width="2" />
+                
+                <circle cx="0" cy="-60" r="5" fill="#00d2ff" filter="url(#glow)">
+                    <animate attributeName="opacity" values="0.2;1;0.2" dur="2s" repeatCount="indefinite" />
+                </circle>
+            </g>
+
+            <g id="sat-auth" transform="translate(200, 200)" opacity="0">
+                <path d="M -30 -30 L 30 -30 L 30 10 L 0 40 L -30 10 Z" fill="#1a1a24" stroke="#ff4757" stroke-width="2" />
+                <text x="0" y="5" text-anchor="middle" fill="#fff" font-size="10">SECURITY</text>
+            </g>
+
+            <g id="sat-channels" transform="translate(800, 200)" opacity="0">
+                <rect x="-40" y="-25" width="80" height="50" rx="5" fill="#1a1a24" stroke="#00d2ff" stroke-width="2" />
+                <text x="0" y="5" text-anchor="middle" fill="#fff" font-size="10">API GATEWAY</text>
+            </g>
+
+            <g id="sat-db" transform="translate(500, 650)" opacity="0">
+                <path d="M -40 -15 L -40 15 Q 0 30 40 15 L 40 -15 Q 0 0 -40 -15" fill="#1a1a24" stroke="#00e676" stroke-width="2" />
+                <ellipse cx="0" cy="-15" rx="40" ry="10" fill="#1a1a24" stroke="#00e676" stroke-width="2" />
+                <text x="0" y="35" text-anchor="middle" fill="#fff" font-size="10">ORACLE DB</text>
+            </g>
+
+            <g id="sat-analytics" transform="translate(500, 100)" opacity="0">
+                <rect x="-30" y="-30" width="15" height="60" fill="#1a1a24" stroke="#e056fd" stroke-width="2" />
+                <rect x="-10" y="-10" width="15" height="40" fill="#1a1a24" stroke="#e056fd" stroke-width="2" />
+                <rect x="10" y="-50" width="15" height="80" fill="#1a1a24" stroke="#e056fd" stroke-width="2" />
+                <text x="0" y="60" text-anchor="middle" fill="#fff" font-size="10">REPORTS</text>
+            </g>
+
+            <circle id="particle-red" r="6" fill="#ff4757" opacity="0" filter="url(#glow)" />
+            <circle id="particle-blue" r="6" fill="#00d2ff" opacity="0" filter="url(#glow)" />
+            <circle id="particle-green" r="6" fill="#00e676" opacity="0" filter="url(#glow)" />
+        </svg>
+    </div>
+
+    <div class="content-wrapper">
+        
+        <section class="step" data-step="1">
+            <div class="info-panel glass-red">
+                <div class="panel-header">
+                    <span>01</span>
+                    <h3>Zero-Trust Security</h3>
+                </div>
+                <p>Before any transaction enters the Core, it passes through the <strong>Identity Access Management (IAM)</strong> layer. We use OAuth2 and Biometric validation to ensure the request source is legitimate.</p>
+            </div>
+        </section>
+
+        <section class="step" data-step="2">
+            <div class="info-panel glass-blue right-align">
+                <div class="panel-header">
+                    <span>02</span>
+                    <h3>Omnichannel Ingestion</h3>
+                </div>
+                <p>Transactions flood in from ATMs, Mobile Apps, and Web Portals. The <strong>API Gateway</strong> standardizes these payloads into ISO 8583 or JSON formats for the core to understand.</p>
+            </div>
+        </section>
+
+        <section class="step" data-step="3">
+            <div class="info-panel glass-blue">
+                <div class="panel-header">
+                    <span>03</span>
+                    <h3>Transaction Processing</h3>
+                </div>
+                <p>The <strong>Isometric Core</strong> (CPU) executes the business logic. It checks funds availability, calculates interest, applies fees, and locks the account row to prevent double-spending.</p>
+            </div>
+        </section>
+
+        <section class="step" data-step="4">
+            <div class="info-panel glass-green right-align">
+                <div class="panel-header">
+                    <span>04</span>
+                    <h3>ACID Persistence</h3>
+                </div>
+                <p>Once validated, data is committed to the <strong>General Ledger</strong>. We use a sharded SQL architecture to handle millions of rows per second without latency.</p>
+            </div>
+        </section>
+
+        <section class="step" data-step="5">
+            <div class="info-panel glass-purple">
+                <div class="panel-header">
+                    <span>05</span>
+                    <h3>Real-Time Insights</h3>
+                </div>
+                <p>Simultaneously, data is streamed via Kafka to the <strong>Analytics Engine</strong>, updating CEO dashboards and fraud detection models instantly.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <section id="specs" class="specs-container">
+        <div class="specs-content">
+            <h2>Technical Specifications</h2>
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <h4>Backend Architecture</h4>
+                    <ul>
+                        <li>Language: Java 17 (Spring Boot)</li>
+                        <li>Architecture: Microservices (Kubernetes)</li>
+                        <li>Communication: gRPC & REST</li>
+                    </ul>
+                </div>
+                <div class="spec-card">
+                    <h4>Data Layer</h4>
+                    <ul>
+                        <li>Primary DB: PostgreSQL (Clustered)</li>
+                        <li>Cache: Redis (Session Management)</li>
+                        <li>Event Bus: Apache Kafka</li>
+                    </ul>
+                </div>
+                <div class="spec-card">
+                    <h4>Security Standards</h4>
+                    <ul>
+                        <li>Encryption: AES-256 for Data at Rest</li>
+                        <li>Compliance: PCI-DSS Level 1</li>
+                        <li>Auth: JWT with Rotation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+        
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

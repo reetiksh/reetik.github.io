@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus ERP | Enterprise Architecture Showcase</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="loader">
+        <div class="loader-text">NEXUS ERP</div>
+    </div>
+
+    <nav>
+        <div class="logo">NEXUS<span class="dot">.</span></div>
+        <div class="nav-links">
+            <a href="#overview">Overview</a>
+            <a href="#workflow">Architecture</a>
+            <a href="#modules">Modules</a>
+            <a href="#tech-stack">Tech Stack</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-bg-overlay"></div>
+        <div class="hero-content">
+            <h1 class="ml12">Enterprise Logic.<br>Redefined.</h1>
+            <p class="hero-desc">A scalable, modular Enterprise Resource Planning system designed to eliminate data silos and automate complex business workflows from procurement to payroll.</p>
+            <div class="cta-group">
+                <a href="#workflow" class="btn-primary">View Workflow</a>
+                <a href="#modules" class="btn-secondary">Explore Modules</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="grid-lines"></div>
+        </div>
+    </header>
+
+    <section id="overview" class="section-split">
+        <div class="image-box parallax" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');">
+            <div class="overlay-text">
+                <h3>The Legacy Problem</h3>
+                <p>Fragmented Data & Slow Velocity</p>
+            </div>
+        </div>
+        <div class="text-box">
+            <h2>Why This Project Exists</h2>
+            <p>Modern enterprises suffer from "Application Sprawl." Accounting uses one tool, HR uses another, and Inventory is managed on spreadsheets. This disconnect leads to:</p>
+            <ul class="feature-list">
+                <li><i class="fas fa-times-circle"></i> <strong>Data Redundancy:</strong> Entering the same customer info 3 times.</li>
+                <li><i class="fas fa-times-circle"></i> <strong>Latency:</strong> Executives wait days for reports that should be instant.</li>
+                <li><i class="fas fa-times-circle"></i> <strong>Human Error:</strong> Manual syncing leads to financial discrepancies.</li>
+            </ul>
+            <p><strong>Nexus ERP</strong> solves this by centralizing the database and creating a unified service layer.</p>
+        </div>
+    </section>
+
+    <section id="workflow" class="workflow-container">
+        <div class="sticky-viewport">
+            <div class="diagram-stage">
+    <div class="diagram-label">SYSTEM ARCHITECTURE v1.0</div>
+    
+    <svg id="architecture-svg" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
+        <defs>
+            <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+            <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#2a2a40;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:#6c63ff;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#2a2a40;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+
+        <path id="pipe-1" d="M 150 200 L 400 200" stroke="url(#line-gradient)" stroke-width="4" stroke-dasharray="10,10" fill="none" opacity="0.3" />
+        <path id="pipe-2" d="M 400 200 L 650 200" stroke="url(#line-gradient)" stroke-width="4" stroke-dasharray="10,10" fill="none" opacity="0.3" />
+
+        <g id="node-client" transform="translate(100, 150)">
+            <rect x="0" y="0" width="100" height="70" rx="5" fill="#1a1a24" stroke="#6c63ff" stroke-width="2" />
+            <path d="M -10 75 L 110 75 L 100 85 L 0 85 Z" fill="#2a2a40" stroke="#6c63ff" stroke-width="1" />
+            <path d="M 5 5 L 95 5 L 95 65 L 5 65 Z" fill="#6c63ff" opacity="0.1" />
+            <rect x="15" y="15" width="40" height="4" rx="2" fill="#fff" opacity="0.5" />
+            <rect x="15" y="25" width="60" height="4" rx="2" fill="#fff" opacity="0.5" />
+            <rect x="15" y="35" width="30" height="4" rx="2" fill="#fff" opacity="0.5" />
+            <text x="50" y="110" text-anchor="middle" fill="#a0a0b0" font-family="monospace" font-size="12">CLIENT / UI</text>
+        </g>
+
+        <g id="node-server" transform="translate(350, 140)">
+            <rect x="0" y="0" width="100" height="120" rx="4" fill="#1a1a24" stroke="#6c63ff" stroke-width="2" />
+            <rect x="10" y="15" width="80" height="10" rx="2" fill="#2a2a40" stroke="#444" stroke-width="1" />
+            <circle cx="20" cy="20" r="2" fill="#00e676" />
+            <rect x="10" y="35" width="80" height="10" rx="2" fill="#2a2a40" stroke="#444" stroke-width="1" />
+            <circle cx="20" cy="40" r="2" fill="#ff4757" />
+            <rect x="10" y="55" width="80" height="10" rx="2" fill="#2a2a40" stroke="#444" stroke-width="1" />
+            <circle cx="20" cy="60" r="2" fill="#00e676" />
+            <rect x="10" y="75" width="80" height="10" rx="2" fill="#2a2a40" stroke="#444" stroke-width="1" />
+            <rect x="10" y="95" width="80" height="10" rx="2" fill="#2a2a40" stroke="#444" stroke-width="1" />
+            <text x="50" y="145" text-anchor="middle" fill="#a0a0b0" font-family="monospace" font-size="12">API GATEWAY</text>
+        </g>
+
+        <g id="node-db" transform="translate(600, 150)">
+            <ellipse cx="50" cy="20" rx="40" ry="15" fill="#1a1a24" stroke="#6c63ff" stroke-width="2" />
+            <path d="M 10 20 L 10 80 A 40 15 0 0 0 90 80 L 90 20" fill="#1a1a24" stroke="#6c63ff" stroke-width="2" />
+            <path d="M 10 40 A 40 15 0 0 0 90 40" fill="none" stroke="#6c63ff" stroke-width="1" opacity="0.5" />
+            <path d="M 10 60 A 40 15 0 0 0 90 60" fill="none" stroke="#6c63ff" stroke-width="1" opacity="0.5" />
+            <text x="50" y="110" text-anchor="middle" fill="#a0a0b0" font-family="monospace" font-size="12">DATABASE</text>
+        </g>
+
+        <g id="data-packet" opacity="0">
+            <circle cx="0" cy="0" r="8" fill="#00e676" filter="url(#neon-glow)" />
+            <circle cx="0" cy="0" r="14" fill="none" stroke="#00e676" stroke-width="1" opacity="0.5" />
+        </g>
+    </svg>
+    
+    <div id="diagram-caption">Waiting for user interaction...</div>
+</div>
+
+            <div class="scroll-content">
+                <article class="step" data-step="1">
+                    <div class="step-card">
+                        <h3>01. Request Initiation</h3>
+                        <p>The workflow begins at the <strong>Presentation Layer</strong>. Users interact with the Thymeleaf/React frontend interfaces. Whether it's a purchase order or an employee leave request, the data is validated client-side and packaged into a secure JSON payload.</p>
+                    </div>
+                </article>
+
+                <article class="step" data-step="2">
+                    <div class="step-card">
+                        <h3>02. Business Logic Processing</h3>
+                        <p>The payload hits the <strong>Spring Boot Controller</strong>. Here, the Service Layer takes over. It checks permissions (Spring Security), executes complex business rules (e.g., "Is budget available?"), and prepares the transaction.</p>
+                    </div>
+                </article>
+
+                <article class="step" data-step="3">
+                    <div class="step-card">
+                        <h3>03. Persistence & Transaction</h3>
+                        <p>Data is committed to the <strong>Relational Database</strong> (MySQL/PostgreSQL) using Hibernate/JPA. The system ensures ACID compliance, meaning the inventory isn't deducted unless the invoice is successfully generated.</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="ui-preview" class="section-dark">
+        <div class="container">
+            <h2>The Interface</h2>
+            <p class="sub-head">A clean, dashboard-driven experience for administrators.</p>
+            
+            <div class="browser-mockup">
+                <div class="browser-header">
+                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    <div class="address-bar">localhost:8080/dashboard/analytics</div>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="sidebar">
+                        <div class="line sm"></div>
+                        <div class="line sm"></div>
+                        <div class="line sm"></div>
+                        <div class="line sm"></div>
+                    </div>
+                    <div class="main-view">
+                        <div class="header-row">
+                            <div class="stat-card">
+                                <span>Revenue</span>
+                                <h4>$124,500</h4>
+                                <div class="chart-line"></div>
+                            </div>
+                            <div class="stat-card">
+                                <span>Pending Orders</span>
+                                <h4>45</h4>
+                                <div class="chart-line"></div>
+                            </div>
+                            <div class="stat-card">
+                                <span>Active Users</span>
+                                <h4>892</h4>
+                                <div class="chart-line"></div>
+                            </div>
+                        </div>
+                        <div class="content-row">
+                            <div class="big-chart">
+                                <div class="bar" style="height: 60%"></div>
+                                <div class="bar" style="height: 80%"></div>
+                                <div class="bar" style="height: 40%"></div>
+                                <div class="bar" style="height: 90%"></div>
+                                <div class="bar" style="height: 70%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="modules" class="section-light">
+        <div class="container">
+            <h2>Core Modules & Functionality</h2>
+            <div class="modules-grid">
+                <div class="module-card">
+                    <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop');"></div>
+                    <div class="card-content">
+                        <i class="fas fa-boxes"></i>
+                        <h3>Inventory Management</h3>
+                        <p>Tracks stock levels across multiple warehouses. Features include:</p>
+                        <ul>
+                            <li>Low-stock automated alerts.</li>
+                            <li>FIFO/LIFO valuation methods.</li>
+                            <li>Supplier management portal.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="module-card">
+                    <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=2070&auto=format&fit=crop');"></div>
+                    <div class="card-content">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <h3>Finance & Accounting</h3>
+                        <p>The backbone of the ERP. It handles:</p>
+                        <ul>
+                            <li>General Ledger & Trial Balance.</li>
+                            <li>Accounts Payable/Receivable.</li>
+                            <li>Automated Tax Calculation.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="module-card">
+                    <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2069&auto=format&fit=crop');"></div>
+                    <div class="card-content">
+                        <i class="fas fa-users"></i>
+                        <h3>HR & Payroll</h3>
+                        <p>Managing the workforce lifecycle:</p>
+                        <ul>
+                            <li>Employee onboarding & records.</li>
+                            <li>Attendance tracking integration.</li>
+                            <li>One-click payroll processing.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tech-stack" class="section-dark centered">
+        <div class="container">
+            <h2>Under The Hood</h2>
+            <p>Built with robust, enterprise-grade technologies.</p>
+            <div class="tech-icons">
+                <div class="tech-item"><i class="fab fa-java"></i><span>Java</span></div>
+                <div class="tech-item"><i class="fas fa-leaf"></i><span>Spring Boot</span></div>
+                <div class="tech-item"><i class="fas fa-database"></i><span>MySQL</span></div>
+                <div class="tech-item"><i class="fab fa-js"></i><span>Javascript</span></div>
+                <div class="tech-item"><i class="fab fa-docker"></i><span>Docker</span></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>Nexus ERP</h3>
+                <p>A portfolio project demonstrating full-stack development capabilities.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2024 Nexus Project. All visual assets used for demonstration purposes.
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
