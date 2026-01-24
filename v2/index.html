@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reetik Sharma | Senior Consultant & Full Stack Engineer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <aside class="sidebar">
+        <div class="profile-header">
+            <div class="profile-pic">
+                <i class="fas fa-user-astronaut"></i>
+            </div>
+            <h2 class="profile-name">Reetik Sharma</h2>
+            <p class="profile-role">Sr. Consultant @ EY</p>
+        </div>
+
+        <nav class="nav-menu">
+            <button class="nav-btn active" data-target="home">
+                <i class="fas fa-home"></i> <span>Home</span>
+            </button>
+            <button class="nav-btn" data-target="journey">
+                <i class="fas fa-route"></i> <span>My Journey</span>
+            </button>
+            <button class="nav-btn" data-target="schemes">
+                <i class="fas fa-building-columns"></i> <span>Govt Schemes</span>
+            </button>
+            <button class="nav-btn" data-target="skills">
+                <i class="fas fa-code"></i> <span>Tech Skills</span>
+            </button>
+            <button class="nav-btn" data-target="education">
+                <i class="fas fa-graduation-cap"></i> <span>Education & Certs</span>
+            </button>
+            <button class="nav-btn" data-target="contact">
+                <i class="fas fa-envelope"></i> <span>Contact</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="https://www.linkedin.com/in/reetik-sharma" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="mailto:sharmars.reetik@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+    </aside>
+
+    <main class="content-area">
+        
+        <section id="home" class="page-section active">
+            <div class="hero-container">
+                <h1 class="glitch-header" data-text="Reetik Sharma">Reetik Sharma</h1>
+                <h2 class="sub-header">Senior Software Developer & Team Leader</h2>
+                <p class="hero-bio">
+                    Specializing in Java, Spring Boot, Microservices, and Government Platforms. 
+                    Currently leading data engineering at <strong>Ernst & Young LLP</strong>.
+                   
+                </p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>4+</h3>
+                        <p>Years Experience</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>5+</h3>
+                        <p>Major Govt Institutions</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>40%</h3>
+                        <p>Efficiency Boost Delivered</p>
+                    </div>
+                </div>
+
+                <button class="cta-btn" onclick="navigateTo('contact')">Get in Touch</button>
+            </div>
+        </section>
+
+        <section id="journey" class="page-section">
+            <h2 class="section-title"><span class="highlight">01.</span> Professional Journey</h2>
+            
+            <article class="journey-article">
+                <div class="article-date">April 2025 - Present</div>
+                <h3>The EY Chapter: Transforming Governance</h3>
+                <p class="article-role">Senior Consultant | Ernst & Young (EY)</p>
+                <p>
+                    Promoted to Senior Consultant, I now spearhead backend development for large-scale digital transformation initiatives. My focus is on <strong>GST enforcement systems</strong> where we handle high-volume taxpayer data.
+                </p>
+                <ul class="article-list">
+                    <li>Designed the GST Audit & Enforcement Dashboard for Himachal Pradesh.</li>
+                    <li>Engineered multi-role case workflows (L1-L3 officer hierarchies).</li>
+                    <li>Optimized query logic to reduce module response time by 40%.</li>
+                </ul>
+            </article>
+
+            <article class="journey-article">
+                <div class="article-date">Aug 2021 - April 2025</div>
+                <h3>Building the Foundation: Banking & ERPs</h3>
+                <p class="article-role">Senior Software Developer | Natural Support & Consultancy</p>
+                <p>
+                    For nearly 4 years, I led full-stack development for Core Banking Systems (CBS) and financial ERPs. I worked directly with government clients to automate accounting, inventory, and fund management.
+                </p>
+                <ul class="article-list">
+                    <li>Led backend for HPSCB (Himachal Pradesh State Cooperative Bank).</li>
+                    <li>Automated critical budgeting workflows for Prasar Bharati.</li>
+                    <li>Reduced fund disbursal delays by over 50%.</li>
+                </ul>
+            </article>
+        </section>
+
+        <section id="schemes" class="page-section">
+            <h2 class="section-title"><span class="highlight">02.</span> Government Schemes & Projects</h2>
+            <p class="section-intro">Detailed breakdown of the major public sector platforms I have engineered.</p>
+
+            <div class="scheme-card">
+                <div class="scheme-header">
+                    <h3>GST Enforcement & Audit System</h3>
+                    <span class="tag">Excise & Taxation Dept</span>
+                </div>
+                <p><strong>The Challenge:</strong> The department needed a real-time system to track audit cases and enforce compliance for thousands of taxpayers.</p>
+                <p><strong>The Solution:</strong> I built a Spring Boot + PostgreSQL microservices architecture that ingests data via GSTN APIs.</p>
+                <div class="scheme-details">
+                    <ul>
+                        <li><strong>Impact:</strong> Improved audit case closure rate by 30%.</li>
+                        <li><strong>Tech:</strong> Java, Spring Boot, ETL Pipelines, React Dashboards.</li>
+                        <li><strong>Feature:</strong> Real-time enforcement case monitoring.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="scheme-card">
+                <div class="scheme-header">
+                    <h3>Core Banking System (CBS)</h3>
+                    <span class="tag">HPSCB</span>
+                </div>
+                <p><strong>The Challenge:</strong> Enabling centralized banking across all branches for the Himachal Pradesh State Cooperative Bank.</p>
+                <p><strong>The Solution:</strong> Developed backend modules for CASA, loans, deposits, and remittances.</p>
+                <div class="scheme-details">
+                    <ul>
+                        <li><strong>Impact:</strong> Enabled centralized operations and streamlined daily banking.</li>
+                        <li><strong>Tech:</strong> Java, Oracle DB, Financial APIs.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="scheme-card">
+                <div class="scheme-header">
+                    <h3>eMaps ERP</h3>
+                    <span class="tag">Indian Bank</span>
+                </div>
+                <p><strong>The Challenge:</strong> Manual accounting and inventory reconciliation was causing delays.</p>
+                <p><strong>The Solution:</strong> A full-stack financial module automating General Ledger and Billing.</p>
+                <div class="scheme-details">
+                    <ul>
+                        <li><strong>Impact:</strong> 40% reduction in manual accounting effort.</li>
+                        <li><strong>Tech:</strong> Java, SQL, Inventory Tracking Algos.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="scheme-card">
+                <div class="scheme-header">
+                    <h3>CobaSys (Budget Mgmt)</h3>
+                    <span class="tag">Prasar Bharati</span>
+                </div>
+                <p><strong>The Challenge:</strong> Tracking fund allocation and expenditure for a massive public broadcaster.</p>
+                <p><strong>The Solution:</strong> A secure fund management ERP with audit trails.</p>
+                <div class="scheme-details">
+                    <ul>
+                        <li><strong>Impact:</strong> Reduced fund disbursal delays by 50% via automation.</li>
+                        <li><strong>Tech:</strong> Java, Security Protocols, Access Controls.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="page-section">
+            <h2 class="section-title"><span class="highlight">03.</span> Technical Arsenal</h2>
+            
+            <div class="skills-wrapper">
+                
+                <div class="skill-category">
+                    <h3><i class="fab fa-java"></i> Core Backend</h3>
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span>Java & Spring Boot</span>
+                            <span>Expert</span>
+                        </div>
+                        <div class="skill-bar"><div class="fill" style="width: 95%"></div></div>
+                        <p class="skill-desc"> extensive experience in microservices, API design, and secure backend logic.</p>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span>Hibernate / JPA</span>
+                            <span>Advanced</span>
+                        </div>
+                        <div class="skill-bar"><div class="fill" style="width: 85%"></div></div>
+                        <p class="skill-desc">ORM implementation for complex data models.</p>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3><i class="fas fa-database"></i> Data & Storage</h3>
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span>SQL (PostgreSQL / Oracle)</span>
+                            <span>Advanced</span>
+                        </div>
+                        <div class="skill-bar"><div class="fill" style="width: 90%"></div></div>
+                        <p class="skill-desc">Complex query optimization, Stored Procedures (PL/SQL).</p>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span>ETL Pipelines</span>
+                            <span>Intermediate</span>
+                        </div>
+                        <div class="skill-bar"><div class="fill" style="width: 75%"></div></div>
+                        <p class="skill-desc">Ingesting high-volume taxpayer data.</p>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3><i class="fas fa-shield-alt"></i> Security & Cryptography</h3>
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span>Security Standards</span>
+                            <span>Advanced</span>
+                        </div>
+                        <div class="skill-bar"><div class="fill" style="width: 80%"></div></div>
+                        <p class="skill-desc">Public Key Cryptography, Data Encryption Standards (DES), Firewalls.</p>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3><i class="fas fa-tools"></i> Tools & Platforms</h3>
+                    <div class="skill-tags">
+                        <span>Git</span>
+                        <span>Maven</span>
+                        <span>Postman</span>
+                        <span>GSTN APIs</span>
+                        <span>Docker</span>
+                        <span>AWS</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="education" class="page-section">
+            <h2 class="section-title"><span class="highlight">04.</span> Education & Certifications</h2>
+            
+            <div class="timeline">
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">Aug 2017 - May 2021</div>
+                    <div class="timeline-content">
+                        <h3>Bachelor of Engineering (CSE)</h3>
+                        <h4>Chandigarh University</h4>
+                        <p>Specialized in Computer Science Engineering. Active in tech fests and coding competitions.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Apr 2014 - Mar 2017</div>
+                    <div class="timeline-content">
+                        <h3>Senior Secondary (Non-Medical)</h3>
+                        <h4>Sainik School Kapurthala</h4>
+                        <p>Foundation in discipline and sciences.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="cert-title">Certifications</h3>
+            <div class="cert-grid">
+                <div class="cert-card">
+                    <i class="fas fa-certificate"></i>
+                    <h4>Cyber Expert</h4>
+                    <p>Advanced security protocols.</p>
+                </div>
+                <div class="cert-card">
+                    <i class="fas fa-network-wired"></i>
+                    <h4>Network Associate Expert</h4>
+                    <p>Network infrastructure mastery.</p>
+                </div>
+                <div class="cert-card">
+                    <i class="fas fa-robot"></i>
+                    <h4>AI For Everyone</h4>
+                    <p>DeepLearning.AI / Coursera.</p>
+                </div>
+                <div class="cert-card">
+                    <i class="fas fa-briefcase"></i>
+                    <h4>Business Implications of AI</h4>
+                    <p>Nano-course on AI strategy.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="page-section">
+            <h2 class="section-title"><span class="highlight">05.</span> Get In Touch</h2>
+            <div class="contact-container">
+                <div class="contact-info-box">
+                    <h3>Reetik Sharma</h3>
+                    <p>I am ready to take on your government and banking tech challenges.</p>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <span>+91 7814910935</span>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:sharmars.reetik@gmail.com">sharmars.reetik@gmail.com</a>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fab fa-linkedin"></i>
+                        <a href="https://www.linkedin.com/in/reetik-sharma" target="_blank">linkedin.com/in/reetik-sharma</a>
+                    </div>
+
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Chandigarh, India</span>
+                    </div>
+
+                    <div class="languages-box">
+                        <h4>Languages Spoken:</h4>
+                        <p>English, Hindi, Punjabi</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

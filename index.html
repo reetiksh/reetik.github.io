@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reetik Sharma | Software Engineer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="logo">RS<span class="dot">.</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h4 class="glitch-text">Hello, I am</h4>
+            <h1 class="name-title">Reetik Sharma</h1>
+            <div class="typewriter">
+                <span id="typing-text"></span><span class="cursor">|</span>
+            </div>
+            <p class="hero-sub">Building robust backend systems & scalable full-stack solutions.</p>
+            <div class="social-icons">
+                <a href="https://www.linkedin.com/in/reetik-sharma" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/reetiksh" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://instagram.com/_sharma_reetik_" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="mailto:sharmars.reetik@gmail.com"><i class="fas fa-envelope"></i></a>
+            </div>
+            <a href="#experience" class="btn-primary">View Work</a>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </section>
+
+    <section id="about" class="section-container">
+        <h2 class="section-title">01. <span class="highlight">About Me</span></h2>
+        <div class="about-grid">
+            <div class="about-text">
+                <p>
+                    I am a dynamic <strong>Software Engineer</strong> with over 4+ years of experience in developing enterprise-grade solutions. My expertise lies in <span class="tech-highlight">Java</span>, <span class="tech-highlight">Spring Boot</span>, and building secure APIs for large-scale systems.
+                </p>
+                <p>
+                    Currently, I work at <strong>EY (Ernst & Young)</strong>, automating workflows for 50k+ users. I thrive on solving real-world challenges with cutting-edge technology.
+                </p>
+                <p class="personal-note">
+                    <em>On a personal note:</em> When I'm not coding or debugging complex systems, I find my calm in the mountains (channeling my inner Snow Leopard) or composing <strong>Hindi Shayari</strong>.
+                </p>
+                
+                <div class="skills-list">
+                    <h3>Tech Stack</h3>
+                    <ul>
+                        <li><i class="fas fa-caret-right"></i> Java (Core/Adv)</li>
+                        <li><i class="fas fa-caret-right"></i> Spring Boot</li>
+                        <li><i class="fas fa-caret-right"></i> React.js</li>
+                        <li><i class="fas fa-caret-right"></i> PostgreSQL / Oracle</li>
+                        <li><i class="fas fa-caret-right"></i> Docker / AWS</li>
+                        <li><i class="fas fa-caret-right"></i> Microservices</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="about-img-container">
+                <div class="img-frame">
+                    <div class="img-placeholder">
+                        <i class="fas fa-code"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="section-container">
+        <h2 class="section-title">02. <span class="highlight">Where I've Worked</span></h2>
+        
+        <div class="experience-tabs">
+            <div class="tab-list">
+                <button class="tab-btn active" data-target="job1">EY (Ernst & Young)</button>
+                <button class="tab-btn" data-target="job2">Natural Support</button>
+                <button class="tab-btn" data-target="job3">Tech Musketeers</button>
+            </div>
+            
+            <div class="job-content active" id="job1">
+                <h3>Software Engineer <span class="company">@ EY</span></h3>
+                <p class="job-duration">Apr 2025 - Present</p>
+                <ul class="job-description">
+                    <li>Spearheaded development of <strong>GST enforcement & audit management platforms</strong>, automating workflows for 50k+ users.</li>
+                    <li>Built Spring Boot + React solutions for audit case tracking and performance monitoring.</li>
+                    <li>Optimized backend with PostgreSQL and caching, cutting query time by 30%.</li>
+                    <li>Collaborated with cross-functional teams to translate business requirements into scalable modules.</li>
+                </ul>
+            </div>
+
+            <div class="job-content" id="job2">
+                <h3>Software Engineer <span class="company">@ Natural Support & Consultancy</span></h3>
+                <p class="job-duration">Aug 2021 - Apr 2025</p>
+                <ul class="job-description">
+                    <li>Developed enterprise ERP solutions (eMaps, CobaSys, BancMate) for government and private clients.</li>
+                    <li>Enhanced efficiency by 25% through algorithm optimization and Docker adoption.</li>
+                    <li>Migrated legacy systems to microservices architecture, boosting deployment throughput by 40%.</li>
+                    <li>Delivered 12+ large-scale projects reducing downtime by 25%.</li>
+                </ul>
+            </div>
+
+            <div class="job-content" id="job3">
+                <h3>Software Developer Intern <span class="company">@ The Tech Musketeers</span></h3>
+                <p class="job-duration">Feb 2021 - Jul 2021</p>
+                <ul class="job-description">
+                    <li>Optimized backend processes, reducing server response time by 30% and handling 1,000+ DB transactions/sec.</li>
+                    <li>Strengthened security by implementing new protocols, reducing vulnerabilities by 25%.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section-container">
+        <h2 class="section-title">03. <span class="highlight">Featured Projects</span></h2>
+        <div class="projects-grid">
+            
+            <div class="project-card">
+                <div class="folder-icon"><i class="far fa-folder"></i></div>
+                <div class="project-links">
+                    <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                </div>
+                <h3>HP GST Enforcement System</h3>
+                <p>A performance monitoring application for the Excise & Taxation Department. Automated audit case allocation and officer productivity tracking.</p>
+                <ul class="project-tech">
+                    <li>Spring Boot</li>
+                    <li>PostgreSQL</li>
+                    <li>React</li>
+                    <li>AdminLTE</li>
+                </ul>
+            </div>
+
+            <div class="project-card">
+                <div class="folder-icon"><i class="far fa-folder"></i></div>
+                <div class="project-links">
+                    <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                </div>
+                <h3>Centralized API Platform</h3>
+                <p>Designed a platform for data fetching and manipulation across systems. Implemented a configurable scheduler with automated API execution.</p>
+                <ul class="project-tech">
+                    <li>Java</li>
+                    <li>Python</li>
+                    <li>Node.js</li>
+                    <li>Thymeleaf</li>
+                </ul>
+            </div>
+
+            <div class="project-card">
+                <div class="folder-icon"><i class="far fa-folder"></i></div>
+                <div class="project-links">
+                    <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                </div>
+                <h3>eMaps ERP</h3>
+                <p>Comprehensive ERP for accounting and inventory. Automated financial workflows and optimized inventory control reducing stock discrepancies.</p>
+                <ul class="project-tech">
+                    <li>Microservices</li>
+                    <li>Docker</li>
+                    <li>SQL</li>
+                    <li>ERP</li>
+                </ul>
+            </div>
+
+            <div class="project-card">
+                <div class="folder-icon"><i class="far fa-folder"></i></div>
+                <div class="project-links">
+                    <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                </div>
+                <h3>CobaSys Fund Management</h3>
+                <p>Budget and Fund Management ERP. Designed modules for real-time insights into budget performance and expenditure tracking.</p>
+                <ul class="project-tech">
+                    <li>Java</li>
+                    <li>Financial Tech</li>
+                    <li>Security</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="achievements" class="section-container">
+        <h2 class="section-title">04. <span class="highlight">Achievements & Education</span></h2>
+        <div class="grid-2-col">
+            <div class="info-box">
+                <h3><i class="fas fa-trophy"></i> Recognition</h3>
+                <ul class="styled-list">
+                    <li>Finalist at <strong>Google Hash Code 2020</strong>, Chandigarh Hub.</li>
+                    <li>Winner, <strong>Chandigarh Police Hackathon 2019</strong> (Security Prototype).</li>
+                    <li>Active Open Source Contributor.</li>
+                    <li>CyberOps Infosec Expert Training.</li>
+                </ul>
+            </div>
+            <div class="info-box">
+                <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                <ul class="styled-list">
+                    <li>
+                        <strong>PG Diploma: Computer Applications</strong><br>
+                        IGNOU, Jaipur (Jan 2022 - Jan 2023)
+                    </li>
+                    <li>
+                        <strong>B.E. Computer Science Engineering</strong><br>
+                        Chandigarh University (Jan 2017 - Jan 2021)
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section-container center-text">
+        <p class="highlight-small">What's Next?</p>
+        <h2 class="big-title">Get In Touch</h2>
+        <p class="contact-desc">
+            I am currently open to new opportunities and collaborations. Whether you have a question about my tech stack or just want to say hi, I'll try my best to get back to you!
+        </p>
+        <a href="mailto:sharmars.reetik@gmail.com" class="btn-primary big-btn">Say Hello</a>
+        
+        <div class="footer">
+            <p>Designed & Built by Reetik Sharma</p>
+            <div class="footer-socials">
+                <a href="https://github.com/reetiksh"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/reetik-sharma"><i class="fab fa-linkedin"></i></a>
+                <a href="https://instagram.com/_sharma_reetik_"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
