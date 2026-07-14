@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reetik Sharma — System Profile</title>
+<meta name="description" content="Reetik Sharma — Software Engineer.">
+<meta name="theme-color" content="#030508">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Anime.js for advanced UI animations -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<!-- Three.js for 3D background -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<style>
+  :root {
+    --bg-base: #030508;
+    --bg-panel: rgba(8, 12, 18, 0.65);
+    --ink: #e2e8f0;
+    --ink-dim: #8b9bb4;
+    --ink-faint: #475569;
+    --line: rgba(79, 184, 172, 0.15);
+    --line-strong: rgba(79, 184, 172, 0.4);
+    --gold: #caa053;
+    --teal: #4fb8ac;
+    --teal-glow: rgba(79, 184, 172, 0.6);
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background-color: var(--bg-base);
+    color: var(--ink);
+    font-family: var(--font-display);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--teal); color: #000; }
+  a { color: inherit; text-decoration: none; }
+  
+  /* CRT Scanline Overlay */
+  body::after {
+    content: " ";
+    display: block;
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    z-index: 999;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+  }
+
+  /* Boot Sequence Overlay */
+  #bootLoader {
+    position: fixed; inset: 0; background: var(--bg-base); z-index: 1000;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: var(--font-mono); color: var(--teal);
+  }
+  .loader-bar { width: 200px; height: 2px; background: var(--line); margin-top: 20px; position: relative; overflow: hidden; }
+  .loader-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--teal); width: 0%; box-shadow: 0 0 10px var(--teal); }
+
+  #globeCanvas { position: fixed; inset: 0; width: 100%; height: 100vh; z-index: 0; opacity: 0.8; pointer-events: none;}
+
+  /* UI Grid Layout */
+  main { position: relative; z-index: 10; padding-bottom: 100px; }
+  section { position: relative; padding: 100px 24px 40px; min-height: 100vh; display: flex; align-items: center; }
+  .section-inner { max-width: 900px; margin: 0 auto; width: 100%; }
+  
+  @media (min-width: 961px) { .section-inner { margin-left: 15vw; } }
+
+  /* Typography */
+  .eyebrow { font-family: var(--font-mono); color: var(--gold); letter-spacing: 0.2em; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 1rem; }
+  h1 { font-size: clamp(3rem, 8vw, 6rem); font-weight: 700; letter-spacing: -0.02em; margin: 0 0 20px; line-height: 1; text-transform: uppercase; text-shadow: 0 0 20px rgba(255,255,255,0.1); }
+  h2.section-title { font-size: clamp(2rem, 4vw, 3rem); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin: 0 0 40px; border-bottom: 1px solid var(--line); padding-bottom: 20px; display: inline-block; }
+  .lede { color: var(--ink-dim); font-size: 1.1rem; line-height: 1.8; max-width: 600px; margin-bottom: 40px; }
+
+  /* Buttons */
+  .btn {
+    font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 16px 32px; position: relative; overflow: hidden; display: inline-block; cursor: pointer;
+    background: transparent; border: 1px solid var(--teal); color: var(--teal); transition: 0.3s ease;
+    box-shadow: 0 0 10px rgba(79, 184, 172, 0.1), inset 0 0 10px rgba(79, 184, 172, 0.05);
+  }
+  .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(79, 184, 172, 0.4), transparent); transition: 0.5s; }
+  .btn:hover::before { left: 100%; }
+  .btn:hover { background: rgba(79, 184, 172, 0.1); box-shadow: 0 0 20px rgba(79, 184, 172, 0.4), inset 0 0 15px rgba(79, 184, 172, 0.2); }
+  .hero-cta { display: flex; gap: 20px; margin-top: 40px; }
+
+  /* Nav Rail */
+  .rail { position: fixed; left: 40px; top: 50%; transform: translateY(-50%); z-index: 50; }
+  .rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 30px; position: relative; }
+  .rail ol::before { content: ""; position: absolute; left: 4px; top: 0; bottom: 0; width: 1px; background: var(--line); }
+  .rail a { display: flex; align-items: center; gap: 15px; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--ink-faint); text-transform: uppercase; }
+  .rail a::before { content: ""; width: 9px; height: 9px; background: var(--bg-base); border: 1px solid var(--line-strong); flex: none; transition: 0.3s; transform: rotate(45deg); }
+  .rail a.active { color: var(--teal); }
+  .rail a.active::before { background: var(--teal); box-shadow: 0 0 10px var(--teal); border-color: var(--teal); }
+  @media (max-width: 960px) { .rail { display: none; } }
+
+  /* Glass Panels (Projects & Timeline) */
+  .panel {
+    background: var(--bg-panel); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--line); padding: 30px; margin-bottom: 20px; position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: pointer;
+  }
+  .panel::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 0%;
+    background: var(--teal); transition: 0.4s ease;
+  }
+  .panel:hover::after { height: 100%; box-shadow: 0 0 15px var(--teal); }
+  .panel:hover { border-color: var(--line-strong); }
+
+  /* Timeline specific */
+  .job-tag { font-family: var(--font-mono); font-size: 0.7rem; color: var(--gold); border: 1px solid var(--gold); padding: 4px 10px; margin-bottom: 15px; display: inline-block; letter-spacing: 0.1em; }
+  .job-dates { font-family: var(--font-mono); font-size: 0.8rem; color: var(--ink-dim); display: block; margin-bottom: 10px; }
+  .panel h3 { margin: 0 0 10px 0; font-size: 1.4rem; font-weight: 500; }
+  .panel h3 span { color: var(--teal); }
+
+  /* Projects Grid */
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .pill { font-family: var(--font-mono); font-size: 0.65rem; color: var(--bg-base); background: var(--teal); padding: 4px 10px; border-radius: 2px; margin-right: 8px; margin-top: 10px; display: inline-block; text-transform: uppercase; font-weight: 600;}
+
+  /* Stack Grid */
+  .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
+  .stack-group h4 { font-family: var(--font-mono); color: var(--gold); border-bottom: 1px solid rgba(202, 160, 83, 0.3); padding-bottom: 10px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.1em;}
+  .stack-group .pill { background: transparent; border: 1px solid var(--line-strong); color: var(--ink-dim); margin-bottom: 8px; }
+
+  /* Interactive Modal Window */
+  #modalOverlay {
+    position: fixed; inset: 0; background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(10px);
+    z-index: 200; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+  }
+  #modalOverlay.active { opacity: 1; pointer-events: all; }
+  .modal-window {
+    background: var(--bg-panel); border: 1px solid var(--teal); width: 100%; max-width: 700px;
+    padding: 40px; position: relative; transform: scale(0.95) translateY(20px);
+    box-shadow: 0 0 40px rgba(79, 184, 172, 0.15), inset 0 0 20px rgba(79, 184, 172, 0.05);
+  }
+  .modal-close {
+    position: absolute; top: 20px; right: 20px; background: transparent; border: 1px solid var(--line);
+    color: var(--ink); width: 40px; height: 40px; cursor: pointer; font-family: var(--font-mono); transition: 0.3s;
+  }
+  .modal-close:hover { border-color: var(--gold); color: var(--gold); }
+  
+  /* Utilities */
+  .reveal { opacity: 0; }
+  .glitch-text { display: inline-block; }
+</style>
+</head>
+<body>
+
+<!-- Boot Sequence -->
+<div id="bootLoader">
+  <div class="glitch-text" id="bootText">INITIALIZING SYSTEM...</div>
+  <div class="loader-bar"><div class="loader-fill" id="bootFill"></div></div>
+</div>
+
+<canvas id="globeCanvas" aria-hidden="true"></canvas>
+
+<nav class="rail" aria-label="Section navigation">
+  <ol>
+    <li><a href="#origin" data-label="Origin">Origin</a></li>
+    <li><a href="#profile" data-label="Profile">Profile</a></li>
+    <li><a href="#timeline" data-label="Timeline">Timeline</a></li>
+    <li><a href="#builds" data-label="Builds">Builds</a></li>
+    <li><a href="#stack" data-label="Stack">Stack</a></li>
+  </ol>
+</nav>
+
+<main>
+  <section id="origin">
+    <div class="section-inner">
+      <p class="eyebrow reveal">SYS_ID: REETIK_SHARMA // STATUS: ONLINE</p>
+      <h1 class="reveal glitch-hover">Reetik Sharma</h1>
+      <p class="lede reveal">Backend-leaning full-stack engineer. 3.5+ years building highly reliable, secure infrastructure for financial institutions, government agencies, and enterprise grids.</p>
+      
+      <div class="hero-cta reveal">
+        <a class="btn" href="#timeline">Access Timeline</a>
+        <a class="btn" href="mailto:sharmars.reetik@gmail.com" style="border-color: var(--gold); color: var(--gold);">Establish Link</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="profile">
+    <div class="section-inner">
+      <h2 class="section-title reveal glitch-hover">Profile_Data</h2>
+      <div class="panel reveal">
+        <p class="lede" style="margin:0;">Executing at the intersection of scale and security. Deployed digital document signing, automated large-scale reconciliation, and architected core banking disbursement schemes currently powering operations across 100,000+ national bank branches.</p>
+        <div style="display:flex; gap: 40px; margin-top: 30px; font-family: var(--font-mono); font-size: 0.85rem;">
+          <div><span style="color:var(--ink-faint);">LOC:</span> <span style="color:var(--teal);">PUNE_IN</span></div>
+          <div><span style="color:var(--ink-faint);">ROLE:</span> <span style="color:var(--teal);">SENIOR_DEV @ CITI</span></div>
+          <div><span style="color:var(--ink-faint);">STACK:</span> <span style="color:var(--teal);">JAVA_SPRING_CLOUD</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <div class="section-inner">
+      <h2 class="section-title reveal glitch-hover">Career_Timeline</h2>
+      
+      <div class="panel reveal modal-trigger" data-title="Citi // Senior Software Engineer" data-tags="Banking Infrastructure, Java, Spring Boot" data-content="Joined Citi's technology organisation in Pune (Hybrid). Working on backend systems and robust APIs behind global banking operations. Integrating Java, Spring Boot, and cloud-native practices from prior fintech/government-scale systems into a large, security-first enterprise environment.">
+        <span class="job-tag">CURRENT</span>
+        <span class="job-dates">FEB 08, 2026 — PRESENT</span>
+        <h3>Software Engineer <span>// CITI</span></h3>
+        <p style="font-size: 0.9rem; color: var(--ink-dim); font-family: var(--font-mono);">[ Click to expand data logs ]</p>
+      </div>
+
+      <div class="panel reveal modal-trigger" data-title="EY // Senior Consultant" data-tags="Government Systems, FinTech, Consulting" data-content="Concluded tenure in early 2026. Architected and managed high-level financial technology initiatives and complex government systems. Ensured high availability and stringent compliance standards for distributed platforms.">
+        <span class="job-dates">ENDED FEB 06, 2026</span>
+        <h3>Senior Consultant <span>// EY</span></h3>
+        <p style="font-size: 0.9rem; color: var(--ink-dim); font-family: var(--font-mono);">[ Click to expand data logs ]</p>
+      </div>
+
+      <div class="panel reveal modal-trigger" data-title="NSCS // Software Engineer" data-tags="Java EE, Microservices, Docker, AWS/GCP" data-content="Led delivery across 12+ concurrent enterprise projects managing up to 15 engineers. Designed RESTful APIs for a 100k+ line Java codebase. Delivered state-wide government disbursement schemes (5 states, 500+ branches). Migrated deployments to Docker/Microservices across AWS/GCP, cutting deployment times significantly.">
+        <span class="job-dates">AUG 2021 — FEB 2026</span>
+        <h3>Software Engineer <span>// NSCS Pvt. Ltd.</span></h3>
+        <p style="font-size: 0.9rem; color: var(--ink-dim); font-family: var(--font-mono);">[ Click to expand data logs ]</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="builds">
+    <div class="section-inner">
+      <h2 class="section-title reveal glitch-hover">Key_Builds</h2>
+      <div class="projects-grid">
+        
+        <div class="panel reveal modal-trigger" data-title="GST Enforcement & Audit System" data-tags="Spring Boot, Microservices, GovTech" data-content="Developed a comprehensive management system for the Excise & Taxation Department of Himachal Pradesh. Built using Spring Boot microservices to handle large-scale tax data, audit tracking, and automated enforcement protocols securely.">
+          <span class="job-dates">Himachal Pradesh Gov</span>
+          <h3>GST Audit System</h3>
+          <span class="pill">GovTech</span> <span class="pill">Microservices</span>
+        </div>
+
+        <div class="panel reveal modal-trigger" data-title="CSS-SNA (PFMS)" data-tags="GovTech, PFMS, Integration, Java" data-content="Implemented Central Sponsored Schemes as a Single Nodal Agency under the Public Financial Management System (PFMS). Handled direct benefit transfers (DBT) to vendors and beneficiaries, securely integrating with central and internal core banking systems.">
+          <span class="job-dates">Direct Benefit Transfer</span>
+          <h3>CSS-SNA</h3>
+          <span class="pill">PFMS</span> <span class="pill">API Integration</span>
+        </div>
+
+        <div class="panel reveal modal-trigger" data-title="eMaps & CobaSys" data-tags="ERP, Fintech, Real-time Automation" data-content="Architected a full ERP platform for accounting and inventory, automating payables and ledgers. Paired with CobaSys, a budget and fund-management ERP providing real-time visibility into financial allocations, reducing manual forecasting efforts by 50%.">
+          <span class="job-dates">Enterprise Platforms</span>
+          <h3>eMaps / CobaSys</h3>
+          <span class="pill">ERP</span> <span class="pill">FinTech</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="stack">
+    <div class="section-inner">
+      <h2 class="section-title reveal glitch-hover">System_Stack</h2>
+      <div class="stack-grid">
+        <div class="stack-group reveal">
+          <h4>Core Languages</h4>
+          <span class="pill">Java</span> <span class="pill">JavaScript</span> <span class="pill">Python</span> <span class="pill">C++</span> <span class="pill">SQL</span>
+        </div>
+        <div class="stack-group reveal">
+          <h4>Frameworks</h4>
+          <span class="pill">Spring Boot</span> <span class="pill">Hibernate</span> <span class="pill">Apache Struts</span> <span class="pill">EJB</span>
+        </div>
+        <div class="stack-group reveal">
+          <h4>Infrastructure</h4>
+          <span class="pill">AWS</span> <span class="pill">GCP</span> <span class="pill">Docker</span> <span class="pill">Microservices</span>
+        </div>
+        <div class="stack-group reveal">
+          <h4>Hardware/Compute</h4>
+          <span class="pill">Local AI / Gemma</span> <span class="pill">Multi-GPU</span> <span class="pill">High-Perf Workstations</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Interactive Window Modal -->
+<div id="modalOverlay">
+  <div class="modal-window" id="modalWindow">
+    <button class="modal-close" id="modalClose">X</button>
+    <div style="font-family: var(--font-mono); color: var(--gold); font-size: 0.8rem; margin-bottom: 10px;" id="modalTags"></div>
+    <h3 id="modalTitle" style="font-size: 2rem; margin: 0 0 20px 0; text-transform: uppercase;"></h3>
+    <p id="modalContent" style="color: var(--ink-dim); line-height: 1.8; font-size: 1.1rem;"></p>
+  </div>
+</div>
+
+<script>
+  // --- Boot Sequence & Scramble Text ---
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
+  
+  function scrambleText(element, originalText) {
+    let iteration = 0;
+    clearInterval(element.interval);
+    element.interval = setInterval(() => {
+      element.innerText = originalText.split("")
+        .map((letter, index) => {
+          if(index < iteration) return originalText[index];
+          return letters[Math.floor(Math.random() * 42)];
+        }).join("");
+      if(iteration >= originalText.length) clearInterval(element.interval);
+      iteration += 1 / 3;
+    }, 30);
+  }
+
+  // Initial Loader Animation
+  window.addEventListener('load', () => {
+    anime({
+      targets: '#bootFill',
+      width: '100%',
+      easing: 'easeInOutQuad',
+      duration: 1500,
+      complete: function() {
+        anime({
+          targets: '#bootLoader',
+          opacity: 0,
+          duration: 500,
+          easing: 'linear',
+          complete: function(anim) {
+            document.getElementById('bootLoader').style.display = 'none';
+            // Trigger Hero entrance
+            anime({
+              targets: '#origin .reveal',
+              translateY: [30, 0],
+              opacity: [0, 1],
+              delay: anime.stagger(150),
+              easing: 'easeOutExpo',
+              duration: 1200
+            });
+            // Scramble Hero Title
+            const heroTitle = document.querySelector('#origin h1');
+            scrambleText(heroTitle, "Reetik Sharma");
+          }
+        });
+      }
+    });
+  });
+
+  // Hover Scramble logic
+  document.querySelectorAll('.glitch-hover').forEach(el => {
+    const original = el.innerText;
+    el.addEventListener('mouseenter', () => scrambleText(el, original));
+  });
+
+  // --- Scroll Animations (Intersection Observer + Anime.js) ---
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+        entry.target.classList.add('animated');
+        anime({
+          targets: entry.target,
+          translateY: [50, 0],
+          opacity: [0, 1],
+          easing: 'easeOutExpo',
+          duration: 1000
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    if(!el.closest('#origin')) { // Hero is handled on load
+      observer.observe(el);
+    }
+  });
+
+  // --- Nav Rail Scrollspy ---
+  const sections = document.querySelectorAll('main section');
+  const navLinks = document.querySelectorAll('.rail a');
+  
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      if (scrollY >= sectionTop - 300) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href').includes(current)) {
+        link.classList.add('active');
+      }
+    });
+  });
+
+  // --- Modal / Interactive Windows logic ---
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalWindow = document.getElementById('modalWindow');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalTags = document.getElementById('modalTags');
+  const modalContent = document.getElementById('modalContent');
+  
+  document.querySelectorAll('.modal-trigger').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      modalTitle.innerText = trigger.dataset.title;
+      modalTags.innerText = "// " + trigger.dataset.tags.toUpperCase();
+      modalContent.innerText = trigger.dataset.content;
+      
+      modalOverlay.classList.add('active');
+      anime({
+        targets: modalWindow,
+        scale: [0.9, 1],
+        translateY: [30, 0],
+        opacity: [0, 1],
+        easing: 'easeOutElastic(1, .6)',
+        duration: 800
+      });
+      scrambleText(modalTitle, trigger.dataset.title);
+    });
+  });
+
+  document.getElementById('modalClose').addEventListener('click', () => {
+    anime({
+      targets: modalWindow,
+      scale: 0.95,
+      translateY: -20,
+      opacity: 0,
+      easing: 'easeInQuad',
+      duration: 300,
+      complete: () => modalOverlay.classList.remove('active')
+    });
+  });
+
+  // --- Three.js Advanced Particle Network ---
+  const canvas = document.getElementById('globeCanvas');
+  const scene = new THREE.Scene();
+  // Cinematic fog to blend objects into the dark background
+  scene.fog = new THREE.FogExp2(0x030508, 0.15);
+
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.z = 5;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  // Group to hold the particle system
+  const systemGroup = new THREE.Group();
+  scene.add(systemGroup);
+
+  // 1. Core Sphere (Inner Core)
+  const coreGeo = new THREE.IcosahedronGeometry(1.2, 2);
+  const coreMat = new THREE.MeshBasicMaterial({ color: 0xcaa053, wireframe: true, transparent: true, opacity: 0.05 });
+  const core = new THREE.Mesh(coreGeo, coreMat);
+  systemGroup.add(core);
+
+  // 2. Data Nodes (Particles)
+  const particleCount = 400;
+  const particleGeo = new THREE.BufferGeometry();
+  const particlePositions = new Float32Array(particleCount * 3);
+  
+  for(let i=0; i < particleCount * 3; i+=3) {
+    // Generate points on a sphere
+    const r = 2.5 + Math.random() * 0.5;
+    const theta = 2 * Math.PI * Math.random();
+    const phi = Math.acos(2 * Math.random() - 1);
+    
+    particlePositions[i] = r * Math.sin(phi) * Math.cos(theta);
+    particlePositions[i+1] = r * Math.sin(phi) * Math.sin(theta);
+    particlePositions[i+2] = r * Math.cos(phi);
+  }
+  
+  particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+  // Create circular sprite for particles
+  const spriteCanvas = document.createElement('canvas');
+  spriteCanvas.width = 16; spriteCanvas.height = 16;
+  const ctx = spriteCanvas.getContext('2d');
+  ctx.beginPath(); ctx.arc(8, 8, 8, 0, 2 * Math.PI); ctx.fillStyle = '#4fb8ac'; ctx.fill();
+  const spriteTexture = new THREE.CanvasTexture(spriteCanvas);
+
+  const particleMat = new THREE.PointsMaterial({
+    color: 0x4fb8ac,
+    size: 0.08,
+    map: spriteTexture,
+    transparent: true,
+    opacity: 0.8,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+  
+  const particles = new THREE.Points(particleGeo, particleMat);
+  systemGroup.add(particles);
+
+  // 3. Connecting Lines (Neural/Network aesthetic)
+  const lineGeo = new THREE.BufferGeometry();
+  const linePositions = [];
+  // Connect close nodes
+  const v1 = new THREE.Vector3();
+  const v2 = new THREE.Vector3();
+  for(let i=0; i<particleCount; i++) {
+    v1.set(particlePositions[i*3], particlePositions[i*3+1], particlePositions[i*3+2]);
+    for(let j=i+1; j<particleCount; j++) {
+      v2.set(particlePositions[j*3], particlePositions[j*3+1], particlePositions[j*3+2]);
+      if(v1.distanceTo(v2) < 0.8) {
+        linePositions.push(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
+      }
+    }
+  }
+  lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+  const lineMat = new THREE.LineBasicMaterial({ color: 0x4fb8ac, transparent: true, opacity: 0.15, blending: THREE.AdditiveBlending });
+  const lines = new THREE.LineSegments(lineGeo, lineMat);
+  systemGroup.add(lines);
+
+  // Mouse interactivity
+  let mouseX = 0;
+  let mouseY = 0;
+  let targetX = 0;
+  let targetY = 0;
+  
+  document.addEventListener('mousemove', (event) => {
+    mouseX = (event.clientX - window.innerWidth / 2) * 0.001;
+    mouseY = (event.clientY - window.innerHeight / 2) * 0.001;
+  });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // Animation Loop
+  const clock = new THREE.Clock();
+
+  function animateThree() {
+    requestAnimationFrame(animateThree);
+    const delta = clock.getDelta();
+    
+    // Auto-rotation
+    systemGroup.rotation.y += 0.05 * delta;
+    systemGroup.rotation.x += 0.02 * delta;
+
+    // Smooth mouse parallax
+    targetX = mouseX * 0.5;
+    targetY = mouseY * 0.5;
+    systemGroup.rotation.y += (targetX - systemGroup.rotation.y) * 0.05;
+    systemGroup.rotation.x += (targetY - systemGroup.rotation.x) * 0.05;
+    
+    // Breathing effect for core
+    core.scale.setScalar(1 + Math.sin(clock.elapsedTime * 2) * 0.05);
+
+    renderer.render(scene, camera);
+  }
+  
+  animateThree();
+
+</script>
+</body>
+</html>

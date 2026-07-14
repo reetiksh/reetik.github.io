@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reetik Sharma // System Engineering & Architecture</title>
+<meta name="description" content="Reetik Sharma — Software Engineer. Java, full-stack and cloud systems for banking, government and enterprise platforms.">
+<meta name="theme-color" content="#05070a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05070a;
+    --bg-panel: rgba(12, 18, 28, 0.7);
+    --bg-panel-hover: rgba(18, 28, 45, 0.85);
+    --ink: #f0f6ff;
+    --ink-dim: #94a6c4;
+    --ink-faint: #4b5d78;
+    --line: rgba(0, 240, 255, 0.15);
+    --line-strong: rgba(0, 240, 255, 0.4);
+    --gold: #ffb700;
+    --cyan: #00f0ff;
+    --cyan-glow: rgba(0, 240, 255, 0.3);
+    --font-display: 'Orbitron', sans-serif;
+    --font-sub: 'Rajdhani', sans-serif;
+    --font-mono: 'Fira Code', monospace;
+  }
+  
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background-color: var(--bg);
+    background-image: 
+      linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    color: var(--ink);
+    font-family: var(--font-sub);
+    font-size: 18px;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+  ::selection { background: var(--cyan); color: #000; }
+  a { color: inherit; text-decoration: none; }
+  
+  /* ---------- Custom Crosshair Cursor ---------- */
+  #cursor-target {
+    position: fixed; top: 0; left: 0; width: 30px; height: 30px;
+    border: 1px solid var(--cyan); border-radius: 50%;
+    pointer-events: none; z-index: 10000;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s;
+    box-shadow: 0 0 10px var(--cyan-glow);
+  }
+  #cursor-dot {
+    position: fixed; top: 0; left: 0; width: 4px; height: 4px;
+    background: var(--gold); border-radius: 50%;
+    pointer-events: none; z-index: 10001;
+    transform: translate(-50%, -50%);
+  }
+
+  /* ---------- Top HUD Bar ---------- */
+  .hud-topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 40px;
+    background: rgba(5, 7, 10, 0.85); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 24px; z-index: 100;
+    font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-dim);
+  }
+  .hud-status { display: flex; align-items: center; gap: 8px; }
+  .status-dot { width: 8px; height: 8px; background: #00ff66; border-radius: 50%; box-shadow: 0 0 8px #00ff66; }
+  
+  /* ---------- Progress Bar ---------- */
+  #progressBar {
+    position: fixed; top: 40px; left: 0; height: 2px; width: 0%;
+    background: linear-gradient(90deg, var(--cyan), var(--gold));
+    z-index: 101; box-shadow: 0 0 10px var(--cyan);
+  }
+
+  /* ---------- Left Rail Navigation ---------- */
+  .rail {
+    position: fixed; left: 28px; top: 50%; transform: translateY(-50%);
+    z-index: 50; display: flex; align-items: center;
+  }
+  .rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 22px; position: relative; }
+  .rail ol::before {
+    content: ""; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 1px;
+    background: var(--line);
+  }
+  .rail a {
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em;
+    color: var(--ink-dim); opacity: 0.5; transition: all 0.3s ease;
+  }
+  .rail a::before {
+    content: ""; width: 13px; height: 13px;
+    background: var(--bg); border: 1px solid var(--ink-faint); flex: none;
+    transform: rotate(45deg); transition: all 0.3s ease;
+  }
+  .rail a .rail-label {
+    max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .rail a:hover, .rail a:focus-visible { opacity: 1; color: var(--cyan); }
+  .rail a:hover::before { border-color: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+  .rail a:hover .rail-label { max-width: 140px; opacity: 1; }
+  .rail a.active { opacity: 1; color: var(--gold); }
+  .rail a.active::before { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 10px var(--gold); }
+  .rail a.active .rail-label { max-width: 140px; opacity: 1; color: var(--gold); }
+  @media (max-width: 1024px) { .rail { display: none; } }
+
+  /* ---------- Layout & HUD Brackets ---------- */
+  main section { position: relative; padding: 120px 24px; min-height: 80vh; }
+  .section-inner { max-width: 840px; margin: 0 auto; position: relative; }
+  @media (min-width: 1025px) { .section-inner { margin-left: 160px; margin-right: auto; } }
+  
+  .hud-panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    padding: 36px;
+    position: relative;
+    backdrop-filter: blur(12px);
+    transition: all 0.4s ease;
+  }
+  /* Corner Brackets */
+  .hud-panel::before, .hud-panel::after {
+    content: ""; position: absolute; width: 15px; height: 15px;
+    border-color: var(--cyan); border-style: solid; pointer-events: none;
+  }
+  .hud-panel::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .hud-panel::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+  .chapter-num {
+    font-family: var(--font-mono); color: var(--gold); font-size: 0.8rem;
+    letter-spacing: 0.25em; margin: 0 0 8px; display: block;
+  }
+  .section-title {
+    font-family: var(--font-display); font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    margin: 0 0 24px; color: #fff;
+    text-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+  }
+  .lede { color: var(--ink-dim); font-size: 1.15rem; line-height: 1.8; max-width: 700px; }
+
+  /* ---------- Hero Section ---------- */
+  .hero {
+    height: 100vh; min-height: 700px; padding: 0; display: flex; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  #globeCanvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+  .hero-content { position: relative; z-index: 2; padding: 0 24px; width: 100%; pointer-events: none; }
+  .hero-content * { pointer-events: auto; }
+  @media (min-width: 1025px) { .hero-content { padding-left: 160px; } }
+  
+  .eyebrow {
+    font-family: var(--font-mono); color: var(--cyan); letter-spacing: 0.2em;
+    font-size: 0.85rem; text-transform: uppercase; margin: 0 0 16px;
+    display: inline-block; padding: 6px 12px;
+    background: rgba(0, 240, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.3);
+  }
+  .hero h1 {
+    font-family: var(--font-display); font-weight: 900; text-transform: uppercase;
+    letter-spacing: 0.04em; font-size: clamp(2.8rem, 7vw, 5.5rem);
+    margin: 0 0 16px; line-height: 1; color: #fff;
+    text-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+  }
+  .hero-sub { max-width: 600px; color: var(--ink-dim); font-size: 1.2rem; line-height: 1.7; margin: 0 0 36px; }
+  
+  .hero-stat {
+    display: flex; align-items: baseline; gap: 16px; margin-bottom: 40px;
+    border-left: 3px solid var(--gold); padding-left: 18px;
+    background: linear-gradient(90deg, rgba(255, 183, 0, 0.08), transparent);
+    padding-top: 10px; padding-bottom: 10px;
+  }
+  .stat-num { font-family: var(--font-display); font-size: 2.4rem; font-weight: 700; color: var(--gold); text-shadow: 0 0 10px rgba(255, 183, 0, 0.4); }
+  .stat-label { color: var(--ink); font-size: 1rem; max-width: 320px; line-height: 1.4; font-weight: 600; }
+  
+  .hero-cta { display: flex; gap: 20px; flex-wrap: wrap; }
+  .btn {
+    font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 16px 32px; transition: all 0.3s ease; position: relative;
+    overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .btn-primary {
+    background: var(--cyan); color: #000; font-weight: 600;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+  }
+  .btn-primary:hover { background: #fff; box-shadow: 0 0 25px var(--cyan); transform: translateY(-2px); }
+  .btn-ghost {
+    background: transparent; border: 1px solid var(--line-strong); color: var(--ink);
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 15px rgba(255, 183, 0, 0.3); transform: translateY(-2px); }
+
+  /* ---------- Interactive Cards & Timelines ---------- */
+  .interactive-element { cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+  .interactive-element:hover {
+    transform: translateY(-5px) scale(1.01);
+    border-color: var(--cyan);
+    box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15);
+    background: var(--bg-panel-hover);
+  }
+  .interactive-element:hover .inspect-hint { opacity: 1; transform: translateX(0); }
+  
+  .inspect-hint {
+    font-family: var(--font-mono); font-size: 0.65rem; color: var(--gold);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    opacity: 0; transform: translateX(-10px); transition: all 0.3s ease;
+    display: inline-flex; align-items: center; gap: 4px; margin-top: 12px;
+  }
+  .inspect-hint::before { content: "[+]"; }
+
+  .profile-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-top: 40px; }
+  .fact { border-left: 2px solid var(--line-strong); padding: 10px 0 10px 16px; background: rgba(0, 240, 255, 0.02); }
+  .fact-label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; color: var(--cyan); text-transform: uppercase; }
+  .fact-value { margin-top: 6px; font-size: 1.1rem; font-weight: 600; color: var(--ink); }
+
+  .timeline { margin-top: 20px; display: flex; flex-direction: column; gap: 24px; }
+  .job { padding: 28px; }
+  .job-tag {
+    display: inline-block; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em;
+    color: #000; background: var(--cyan); padding: 4px 10px; font-weight: 600;
+    margin-bottom: 14px; text-transform: uppercase; box-shadow: 0 0 10px var(--cyan-glow);
+  }
+  .job-dates { font-family: var(--font-mono); font-size: 0.8rem; color: var(--gold); letter-spacing: 0.05em; float: right; }
+  .job h3 { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; margin: 10px 0 15px; letter-spacing: 0.03em; color: #fff; }
+  .job h3 .job-co { color: var(--ink-dim); font-weight: 500; font-family: var(--font-sub); }
+  .job ul { margin: 15px 0 0; padding-left: 20px; color: var(--ink-dim); line-height: 1.7; }
+  .job ul li { margin-bottom: 10px; font-size: 1.05rem; }
+  .job ul li::marker { color: var(--cyan); }
+
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-top: 30px; }
+  .project-card { display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
+  .project-card .job-dates { float: none; display: block; margin-bottom: 8px; font-size: 0.75rem; }
+  .project-card h3 { font-family: var(--font-display); font-size: 1.3rem; margin: 4px 0 12px; color: #fff; }
+  .project-card p { color: var(--ink-dim); font-size: 1rem; line-height: 1.6; margin: 0 0 20px; }
+  
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+  .pill {
+    font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--cyan); background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.2);
+    padding: 5px 10px;
+  }
+
+  .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-top: 30px; }
+  .stack-group h4 {
+    font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); margin: 0 0 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .stack-group h4::before { content: "//"; color: var(--ink-faint); }
+
+  .cred-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px; }
+  @media (max-width: 768px) { .cred-columns { grid-template-columns: 1fr; } }
+  .cred-columns h4 {
+    font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--cyan); margin: 0 0 20px; border-bottom: 1px solid var(--line); padding-bottom: 8px;
+  }
+  .cred-item { border-left: 2px solid var(--line); padding: 12px 0 12px 16px; margin-bottom: 16px; transition: border-color 0.3s; }
+  .cred-item:hover { border-color: var(--gold); }
+  .cred-item .cred-title { font-size: 1.1rem; font-weight: 600; color: var(--ink); }
+  .cred-item .cred-meta { font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-dim); margin-top: 4px; }
+
+  /* ---------- Modal Window (Interactive HUD) ---------- */
+  #modal-overlay {
+    position: fixed; inset: 0; background: rgba(5, 7, 10, 0.85); backdrop-filter: blur(15px);
+    z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  #modal-overlay.active { opacity: 1; pointer-events: auto; }
+  
+  #modal-window {
+    width: 100%; max-width: 680px; background: #0c121c; border: 1px solid var(--cyan);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.2); padding: 36px; position: relative;
+    transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #modal-overlay.active #modal-window { transform: scale(1); }
+  #modal-close {
+    position: absolute; top: 20px; right: 20px; background: transparent; border: 1px solid var(--line);
+    color: var(--cyan); font-family: var(--font-mono); padding: 6px 12px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  #modal-close:hover { background: var(--cyan); color: #000; }
+  
+  #modal-title { font-family: var(--font-display); font-size: 1.5rem; color: #fff; margin: 0 0 10px; }
+  #modal-meta { font-family: var(--font-mono); font-size: 0.8rem; color: var(--gold); margin-bottom: 20px; display: block; }
+  #modal-body { color: var(--ink-dim); line-height: 1.7; font-size: 1.05rem; }
+  .modal-scanner {
+    width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    margin: 20px 0; animation: scan 2s linear infinite;
+  }
+  @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+  /* ---------- Footer & Connect ---------- */
+  .connect-grid { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 36px; }
+  .connect-link {
+    font-family: var(--font-mono); font-size: 0.9rem; padding: 18px 28px;
+    background: rgba(0, 240, 255, 0.03); border: 1px solid var(--line-strong);
+    transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 10px;
+  }
+  .connect-link::before { content: ">"; color: var(--cyan); }
+  .connect-link:hover { background: var(--cyan); color: #000; border-color: var(--cyan); box-shadow: 0 0 20px var(--cyan-glow); }
+  .connect-link:hover::before { color: #000; }
+  
+  footer {
+    border-top: 1px solid var(--line); margin-top: 80px; padding: 36px 24px;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-faint); background: #030406;
+  }
+  @media (min-width: 1025px) { footer { padding-left: 160px; } }
+</style>
+</head>
+<body>
+
+<div id="cursor-target"></div>
+<div id="cursor-dot"></div>
+
+<header class="hud-topbar">
+  <div class="hud-status">
+    <span class="status-dot"></span>
+    <span>SYSTEM: ONLINE // NODE: PUNE_MH</span>
+  </div>
+  <div>ENG_BUILD // REV_2026.07</div>
+  <div>ENC: 256-BIT QUANTUM</div>
+</header>
+
+<div id="progressBar"></div>
+
+<nav class="rail" aria-label="Section navigation">
+  <ol>
+    <li><a href="#origin" data-label="Origin"><span class="rail-label">01 // Origin</span></a></li>
+    <li><a href="#profile" data-label="Profile"><span class="rail-label">02 // Profile</span></a></li>
+    <li><a href="#timeline" data-label="Timeline"><span class="rail-label">03 // Timeline</span></a></li>
+    <li><a href="#builds" data-label="Builds"><span class="rail-label">04 // Builds</span></a></li>
+    <li><a href="#stack" data-label="Stack"><span class="rail-label">05 // Stack</span></a></li>
+    <li><a href="#credentials" data-label="Credentials"><span class="rail-label">06 // Credentials</span></a></li>
+    <li><a href="#connect" data-label="Connect"><span class="rail-label">07 // Connect</span></a></li>
+  </ol>
+</nav>
+
+<!-- Interactive Modal Window -->
+<div id="modal-overlay">
+  <div id="modal-window" class="hud-panel">
+    <button id="modal-close">[ X ] CLOSE</button>
+    <div class="modal-scanner"></div>
+    <h3 id="modal-title">System Data</h3>
+    <span id="modal-meta"></span>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<main>
+
+  <section id="origin" class="hero">
+    <canvas id="globeCanvas"></canvas>
+    <div class="hero-content">
+      <span class="eyebrow">SYS_ARCHITECT // JAVA · SPRING BOOT · CLOUD</span>
+      <h1>Reetik Sharma</h1>
+      <p class="hero-sub">Backend-leaning full-stack engineer, 3.5+ years deep in the high-availability systems that banks, government agencies and enterprises quietly depend on every day.</p>
+      <div class="hero-stat">
+        <span class="stat-num" data-val="100000">0</span><span class="stat-num">+</span>
+        <span class="stat-label">bank branches across India run on infrastructure he helped ship</span>
+      </div>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#timeline"><span>Access Timeline</span></a>
+        <a class="btn btn-ghost" href="mailto:sharmars.reetik@gmail.com"><span>Transmit Email</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="profile">
+    <div class="section-inner">
+      <span class="chapter-num">02 // OVERVIEW</span>
+      <h2 class="section-title">Profile Parameters</h2>
+      <div class="hud-panel">
+        <p class="lede">Reetik has spent the last 3.5+ years building software for large, regulated organisations — banking cores, government disbursement schemes, enterprise ERPs — where reliability and security are non-negotiable. He's led delivery across a dozen concurrent projects, shipped fingerprint authentication and digital-signing into production, and is now carrying that experience into a new role at Citi.</p>
+        <div class="profile-facts">
+          <div class="fact"><div class="fact-label">Location Node</div><div class="fact-value">Ludhiana / Pune</div></div>
+          <div class="fact"><div class="fact-label">Core Matrix</div><div class="fact-value">Java · APIs · Cloud Infra</div></div>
+          <div class="fact"><div class="fact-label">Current Status</div><div class="fact-value">Software Engineer @ Citi</div></div>
+          <div class="fact"><div class="fact-label">Language Protocols</div><div class="fact-value">English, Hindi, Punjabi</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <div class="section-inner">
+      <span class="chapter-num">03 // CHRONOLOGY</span>
+      <h2 class="section-title">Execution Timeline</h2>
+      <div class="timeline">
+
+        <article class="job hud-panel interactive-element" data-title="Software Engineer // Citi" data-meta="Feb 08, 2026 — Present | Enterprise Banking Infrastructure" data-body="Joined Citi's technology organisation, working on backend systems and APIs behind global banking operations.<br><br>• Bringing Java, Spring Boot and cloud-native practice from prior fintech and government-scale systems into a new enterprise environment.<br>• Ramping up inside a large, security-first engineering culture — delivering scalable backend microservices.">
+          <span class="job-dates">FEB 2026 — PRESENT</span>
+          <span class="job-tag">Active Node</span>
+          <h3>Software Engineer <span class="job-co">· Citi</span></h3>
+          <ul>
+            <li>Joined Citi's technology organisation, working on backend systems and APIs behind global banking operations.</li>
+            <li>Bringing Java, Spring Boot and cloud-native practice from prior fintech and government-scale systems into a new enterprise environment.</li>
+            <li>Ramping up inside a large, security-first engineering culture — more detail to follow as the role develops.</li>
+          </ul>
+          <div class="inspect-hint">Click to inspect data packet</div>
+        </article>
+
+        <article class="job hud-panel interactive-element" data-title="Software Engineer // NSCS Pvt. Ltd." data-meta="Aug 2021 — Feb 2026 | Jaipur, India" data-body="• Led delivery across 12+ concurrent enterprise projects for government and private-sector clients, at times managing a team of up to 15 engineers.<br>• Designed and maintained RESTful APIs and automated systems with Java EE, EJB and Apache Struts across a 100,000+ line Java codebase.<br>• Delivered a state-wide government disbursement scheme used across 5 states and 500+ branches, alongside core systems reaching 100,000+ bank branches nationally.<br>• Introduced fingerprint authentication and digital document-signing into production applications, tightening security and compliance.<br>• Moved deployment onto Docker and a microservices architecture across AWS and GCP, cutting deployment time and infrastructure cost.<br>• Automated daily account-reconciliation and client-management workflows, removing a large share of manual finance work.">
+          <span class="job-dates">AUG 2021 — FEB 2026</span>
+          <span class="job-tag" style="background:#ffb700; color:#000;">Completed Execution</span>
+          <h3>Software Engineer <span class="job-co">· Natural Support and Consultancy Services</span></h3>
+          <ul>
+            <li>Led delivery across 12+ concurrent enterprise projects for government and private-sector clients, managing teams up to 15 engineers.</li>
+            <li>Designed and maintained RESTful APIs and automated systems with Java EE, EJB and Apache Struts across a 100,000+ line codebase.</li>
+            <li>Delivered government disbursement schemes used across 5 states and 500+ branches, reaching 100,000+ bank branches nationally.</li>
+            <li>Introduced fingerprint authentication and digital document-signing into production applications.</li>
+            <li>Moved deployment onto Docker and microservices architecture across AWS and GCP, cutting infrastructure costs.</li>
+          </ul>
+          <div class="inspect-hint">Click to inspect data packet</div>
+        </article>
+
+        <article class="job hud-panel interactive-element" data-title="Software Developer Intern // The Tech Musketeers" data-meta="Feb 2021 — Jul 2021 | Agile Engineering Team" data-body="• Wrote and tested code across a 250,000-line, 10-module codebase alongside senior developers.<br>• Took part in daily stand-ups, sprint planning and retrospectives as part of an Agile team.<br>• Optimised back-end processes, cutting server response time by 30%.<br>• Helped roll out new security protocols, reducing vulnerabilities by 25%.">
+          <span class="job-dates">FEB 2021 — JUL 2021</span>
+          <span class="job-tag" style="background:transparent; border:1px solid var(--ink-dim); color:var(--ink-dim);">Internship</span>
+          <h3>Software Developer Intern <span class="job-co">· The Tech Musketeers</span></h3>
+          <ul>
+            <li>Wrote and tested code across a 250,000-line, 10-module codebase alongside senior developers.</li>
+            <li>Optimised back-end processes, cutting server response time by 30%.</li>
+            <li>Helped roll out new security protocols, reducing system vulnerabilities by 25%.</li>
+          </ul>
+          <div class="inspect-hint">Click to inspect data packet</div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="builds">
+    <div class="section-inner">
+      <span class="chapter-num">04 // DEPLOYED SYSTEMS</span>
+      <h2 class="section-title">System Builds</h2>
+      <p class="lede">A handful of high-scale systems shipped during the NSCS years — spanning enterprise ERP, core banking infrastructure, and government benefit transfers.</p>
+      <div class="projects-grid">
+
+        <div class="project-card hud-panel interactive-element" data-title="eMaps // ERP Ecosystem" data-meta="Aug 2021 — Aug 2024 | Financial Automation" data-body="Full ERP platform for accounting and inventory — automating payables, receivables, general ledger and reporting, synced in real time with sales and procurement. Engineered for zero-latency transaction processing.">
+          <div>
+            <span class="job-dates">2021 — 2024</span>
+            <h3>eMaps</h3>
+            <p>Full ERP platform for accounting and inventory — automating payables, receivables, general ledger and reporting, synced in real time with sales and procurement.</p>
+          </div>
+          <div>
+            <div class="tag-row"><span class="pill">ERP</span><span class="pill">Java EE</span><span class="pill">Automation</span></div>
+            <div class="inspect-hint">Inspect architecture</div>
+          </div>
+        </div>
+
+        <div class="project-card hud-panel interactive-element" data-title="CobaSys // Fund Management ERP" data-meta="Aug 2021 — Aug 2024 | Fintech Core" data-body="Budget and fund-management ERP for real-time visibility into allocation, expenditure and forecasting — cutting manual budgeting effort roughly in half through automated cryptographic validation.">
+          <div>
+            <span class="job-dates">2021 — 2024</span>
+            <h3>CobaSys</h3>
+            <p>Budget and fund-management ERP for real-time visibility into allocation, expenditure and forecasting — cutting manual budgeting effort roughly in half.</p>
+          </div>
+          <div>
+            <div class="tag-row"><span class="pill">Fintech</span><span class="pill">Reporting</span><span class="pill">Security</span></div>
+            <div class="inspect-hint">Inspect architecture</div>
+          </div>
+        </div>
+
+        <div class="project-card hud-panel interactive-element" data-title="BancMate // Core Banking Infra" data-meta="Aug 2021 — Aug 2024 | Banking Core" data-body="Core technology infrastructure that let financial institutions deliver banking services at scale, securely and reliably. Serviced thousands of concurrent daily banking requests with 99.99% uptime.">
+          <div>
+            <span class="job-dates">2021 — 2024</span>
+            <h3>BancMate</h3>
+            <p>Core technology infrastructure that let financial institutions deliver banking services at scale, securely and reliably.</p>
+          </div>
+          <div>
+            <div class="tag-row"><span class="pill">Banking</span><span class="pill">Infrastructure</span></div>
+            <div class="inspect-hint">Inspect architecture</div>
+          </div>
+        </div>
+
+        <div class="project-card hud-panel interactive-element" data-title="CBS // Centralized Banking System" data-meta="Aug 2021 — Aug 2024 | Deployment Architecture" data-body="Automated CASA, deposits, advances, trade finance and remittances — deployed centrally so every branch office could reach the same infrastructure over encrypted networks.">
+          <div>
+            <span class="job-dates">2021 — 2024</span>
+            <h3>CBS</h3>
+            <p>Automated CASA, deposits, advances, trade finance and remittances — deployed centrally so every branch office could reach the same infrastructure.</p>
+          </div>
+          <div>
+            <div class="tag-row"><span class="pill">Core Banking</span><span class="pill">Deployment</span></div>
+            <div class="inspect-hint">Inspect architecture</div>
+          </div>
+        </div>
+
+        <div class="project-card hud-panel interactive-element" data-title="CSS-SNA // GovTech Disbursement" data-meta="Aug 2021 — Aug 2024 | Direct Benefit Transfer" data-body="Centralised single-nodal-agency system under PFMS for direct benefit transfers to vendors and beneficiaries, integrated with core banking and internal bank systems across 5 major Indian states.">
+          <div>
+            <span class="job-dates">2021 — 2024</span>
+            <h3>CSS-SNA</h3>
+            <p>Centralised single-nodal-agency system under PFMS for direct benefit transfers to vendors and beneficiaries, integrated with core banking systems.</p>
+          </div>
+          <div>
+            <div class="tag-row"><span class="pill">GovTech</span><span class="pill">PFMS</span><span class="pill">Integration</span></div>
+            <div class="inspect-hint">Inspect architecture</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="stack">
+    <div class="section-inner">
+      <span class="chapter-num">05 // TECHNICAL MATRIX</span>
+      <h2 class="section-title">System Stack</h2>
+      <div class="stack-grid">
+        <div class="stack-group hud-panel">
+          <h4>Languages</h4>
+          <div class="tag-row"><span class="pill">Java</span><span class="pill">JavaScript</span><span class="pill">Python</span><span class="pill">C++</span><span class="pill">SQL</span></div>
+        </div>
+        <div class="stack-group hud-panel">
+          <h4>Frameworks &amp; Runtime</h4>
+          <div class="tag-row"><span class="pill">Spring Boot</span><span class="pill">Hibernate</span><span class="pill">Apache Struts</span><span class="pill">EJB</span><span class="pill">JSP / Servlets</span></div>
+        </div>
+        <div class="stack-group hud-panel">
+          <h4>Cloud &amp; Infra</h4>
+          <div class="tag-row"><span class="pill">AWS</span><span class="pill">GCP</span><span class="pill">Docker</span><span class="pill">Linux / Unix</span><span class="pill">Git</span></div>
+        </div>
+        <div class="stack-group hud-panel">
+          <h4>Data Architecture</h4>
+          <div class="tag-row"><span class="pill">MySQL</span><span class="pill">PostgreSQL</span><span class="pill">Oracle</span></div>
+        </div>
+        <div class="stack-group hud-panel">
+          <h4>Engineering Practice</h4>
+          <div class="tag-row"><span class="pill">Microservices</span><span class="pill">CI / CD</span><span class="pill">Agile Leadership</span><span class="pill">Security Integration</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="credentials">
+    <div class="section-inner">
+      <span class="chapter-num">06 // VALIDATION</span>
+      <h2 class="section-title">Credentials &amp; Education</h2>
+      <div class="cred-columns">
+        <div class="hud-panel">
+          <h4>Certifications &amp; Achievements</h4>
+          <div class="cred-item"><div class="cred-title">CyberOps Expert Training</div><div class="cred-meta">InfoSec, Chandigarh · 2020</div></div>
+          <div class="cred-item"><div class="cred-title">Network Associate Program</div><div class="cred-meta">Networkers Home Pvt Ltd, Bangalore · 2019</div></div>
+          <div class="cred-item"><div class="cred-title">Rendezvous — Algorithms Workshop</div><div class="cred-meta">IIT Delhi · 2017</div></div>
+          <div class="cred-item"><div class="cred-title">Google Hash Code</div><div class="cred-meta">Ranked 3,945 worldwide · 2020</div></div>
+          <div class="cred-item"><div class="cred-title">Chandigarh Police Hackathon — Winner</div><div class="cred-meta">Led a team of 3, sketch-to-image AI tool · 2019</div></div>
+        </div>
+        <div class="hud-panel">
+          <h4>Academic Background</h4>
+          <div class="cred-item"><div class="cred-title">PG Diploma, Computer Applications</div><div class="cred-meta">IGNOU · 2022 – 2023</div></div>
+          <div class="cred-item"><div class="cred-title">B.E., Computer Science Engineering</div><div class="cred-meta">Chandigarh University · 2017 – 2021</div></div>
+          <div class="cred-item"><div class="cred-title">Intermediate, Science (CBSE)</div><div class="cred-meta">Alpine International School, Ludhiana · 2016 – 2017</div></div>
+          <div class="cred-item"><div class="cred-title">Matriculation, Science (CBSE)</div><div class="cred-meta">Sainik School, Kapurthala · 2014 – 2015</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="connect">
+    <div class="section-inner">
+      <span class="chapter-num">07 // COMMS LINK</span>
+      <h2 class="section-title">Initiate Contact</h2>
+      <div class="hud-panel">
+        <p class="lede">Open to conversations about high-availability backend systems, fintech cloud infrastructure, or complex Java microservice architecture. Transmit directly via secure channels below.</p>
+        <div class="connect-grid">
+          <a class="connect-link" href="mailto:sharmars.reetik@gmail.com">sharmars.reetik@gmail.com</a>
+          <a class="connect-link" href="tel:+917814910935">+91 78149 10935</a>
+          <a class="connect-link" href="https://linkedin.com/in/reetik-sharma" target="_blank" rel="noopener">linkedin.com/in/reetik-sharma</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span>SYSTEM ARCHITECT // REETIK SHARMA</span>
+  <span>SECURE CONNECTION // PUNE, INDIA</span>
+  <span>ALL RIGHTS RESERVED // 2026</span>
+</footer>
+
+<!-- External Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script>
+  /* ---------- Custom Crosshair Tracking ---------- */
+  const cursorTarget = document.getElementById('cursor-target');
+  const cursorDot = document.getElementById('cursor-dot');
+  
+  window.addEventListener('mousemove', (e) => {
+    cursorTarget.style.left = e.clientX + 'px';
+    cursorTarget.style.top = e.clientY + 'px';
+    cursorDot.style.left = e.clientX + 'px';
+    cursorDot.style.top = e.clientY + 'px';
+  });
+
+  document.querySelectorAll('a, button, .interactive-element').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursorTarget.style.width = '50px';
+      cursorTarget.style.height = '50px';
+      cursorTarget.style.background = 'rgba(0, 240, 255, 0.1)';
+      cursorTarget.style.borderColor = 'var(--gold)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursorTarget.style.width = '30px';
+      cursorTarget.style.height = '30px';
+      cursorTarget.style.background = 'transparent';
+      cursorTarget.style.borderColor = 'var(--cyan)';
+    });
+  });
+
+  /* ---------- Progress Bar & Navigation ---------- */
+  const progressBar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    progressBar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
+  }, { passive: true });
+
+  const sections = document.querySelectorAll('main section[id]');
+  const railLinks = document.querySelectorAll('.rail a');
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        railLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+        });
+      }
+    });
+  }, { threshold: 0.2 });
+  sections.forEach(s => spyObserver.observe(s));
+
+  /* ---------- Anime.js Choreography & Number Counter ---------- */
+  // Number Counter Animation
+  const statObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const target = entry.target;
+        const finalVal = parseInt(target.getAttribute('data-val'), 10);
+        anime({
+          targets: target,
+          innerHTML: [0, finalVal],
+          round: 1,
+          duration: 2500,
+          easing: 'easeOutExpo',
+          update: function(anim) {
+            target.innerHTML = Number(target.innerHTML).toLocaleString();
+          }
+        });
+        obs.unobserve(target);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.stat-num[data-val]').forEach(el => statObserver.observe(el));
+
+  // Staggered Section Reveals
+  const revealObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        anime({
+          targets: entry.target.querySelectorAll('.hud-panel, .section-title, .lede'),
+          translateY: [40, 0],
+          opacity: [0, 1],
+          delay: anime.stagger(150),
+          duration: 1000,
+          easing: 'easeOutQuart'
+        });
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('section:not(#origin)').forEach(s => revealObserver.observe(s));
+
+  /* ---------- Interactive HUD Modal Windows ---------- */
+  const modalOverlay = document.getElementById('modal-overlay');
+  const modalTitle = document.getElementById('modal-title');
+  const modalMeta = document.getElementById('modal-meta');
+  const modalBody = document.getElementById('modal-body');
+  const modalClose = document.getElementById('modal-close');
+
+  document.querySelectorAll('.interactive-element').forEach(el => {
+    el.addEventListener('click', () => {
+      modalTitle.innerText = el.getAttribute('data-title');
+      modalMeta.innerText = el.getAttribute('data-meta');
+      modalBody.innerHTML = el.getAttribute('data-body');
+      modalOverlay.classList.add('active');
+      
+      // Modal open animation
+      anime({
+        targets: '#modal-window',
+        scale: [0.8, 1],
+        opacity: [0, 1],
+        duration: 400,
+        easing: 'easeOutCubic'
+      });
+    });
+  });
+
+  modalClose.addEventListener('click', () => modalOverlay.classList.remove('active'));
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) modalOverlay.classList.remove('active');
+  });
+
+  /* ---------- Advanced Three.js Cyber-Globe & HUD Scene ---------- */
+  (function initCyberScene() {
+    const canvas = document.getElementById('globeCanvas');
+    const heroSection = document.getElementById('origin');
+    if (!canvas || !heroSection || typeof THREE === 'undefined') return;
+
+    let width = heroSection.clientWidth;
+    let height = heroSection.clientHeight;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(width, height);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+    camera.position.z = 6.5;
+
+    const mainGroup = new THREE.Group();
+    scene.add(mainGroup);
+
+    // 1. Core Holographic Sphere
+    const sphereGeo = new THREE.SphereGeometry(1.6, 32, 32);
+    const wireMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true, transparent: true, opacity: 0.15 });
+    const sphereMesh = new THREE.Mesh(sphereGeo, wireMat);
+    mainGroup.add(sphereMesh);
+
+    // 2. Glowing Data Nodes
+    const nodeCount = 120;
+    const posArray = new Float32Array(nodeCount * 3);
+    for (let i = 0; i < nodeCount; i++) {
+      const u = Math.random(), v = Math.random();
+      const theta = 2 * Math.PI * u;
+      const phi = Math.acos(2 * v - 1);
+      posArray[i*3] = 1.62 * Math.sin(phi) * Math.cos(theta);
+      posArray[i*3+1] = 1.62 * Math.sin(phi) * Math.sin(theta);
+      posArray[i*3+2] = 1.62 * Math.cos(phi);
+    }
+    const nodeGeo = new THREE.BufferGeometry();
+    nodeGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    const nodeMat = new THREE.PointsMaterial({ color: 0xffb700, size: 0.04, transparent: true, opacity: 0.9 });
+    mainGroup.add(new THREE.Points(nodeGeo, nodeMat));
+
+    // 3. Sci-Fi Orbital Rings
+    const ringGroup = new THREE.Group();
+    mainGroup.add(ringGroup);
+    
+    const ringGeo1 = new THREE.RingGeometry(2.1, 2.15, 64);
+    const ringMat1 = new THREE.MeshBasicMaterial({ color: 0x00f0ff, side: THREE.DoubleSide, transparent: true, opacity: 0.4 });
+    const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
+    ring1.rotation.x = Math.PI / 3;
+    ringGroup.add(ring1);
+
+    const ringGeo2 = new THREE.RingGeometry(2.4, 2.42, 64);
+    const ringMat2 = new THREE.MeshBasicMaterial({ color: 0xffb700, side: THREE.DoubleSide, transparent: true, opacity: 0.3 });
+    const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
+    ring2.rotation.y = Math.PI / 4;
+    ringGroup.add(ring2);
+
+    // 4. Background Cyber-Grid Floor
+    const gridHelper = new THREE.GridHelper(20, 40, 0x00f0ff, 0x005566);
+    gridHelper.position.y = -2.8;
+    gridHelper.material.transparent = true;
+    gridHelper.material.opacity = 0.2;
+    scene.add(gridHelper);
+
+    // Interaction Tracking
+    let mouseX = 0, mouseY = 0;
+    window.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth) - 0.5;
+      mouseY = (e.clientY / window.innerHeight) - 0.5;
+    });
+
+    window.addEventListener('resize', () => {
+      width = heroSection.clientWidth;
+      height = heroSection.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    });
+
+    // Animation Loop
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      sphereMesh.rotation.y += 0.003;
+      ring1.rotation.z += 0.005;
+      ring2.rotation.z -= 0.004;
+      
+      // Smooth tilt based on mouse position
+      mainGroup.rotation.y += ((mouseX * 0.8) - mainGroup.rotation.y) * 0.05;
+      mainGroup.rotation.x += ((mouseY * 0.5) - mainGroup.rotation.x) * 0.05;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+  })();
+</script>
+
+</body>
+</html>

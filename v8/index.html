@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reetik Sharma — Software Engineer</title>
+<meta name="description" content="Reetik Sharma — Software Engineer.">
+<meta name="theme-color" content="#F7F5F0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Elegant Serif for display, Clean Sans for data/body -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Anime.js for smooth UI animations -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<!-- Three.js for fluid background -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<style>
+  :root {
+    --bg-base: #F7F5F0; /* Soft warm pearl */
+    --bg-panel: rgba(255, 255, 255, 0.55);
+    --ink: #2c2a29; /* Deep charcoal, softer than black */
+    --ink-dim: #6b6865;
+    --ink-faint: #a3a09d;
+    --line: rgba(0, 0, 0, 0.08);
+    --line-strong: rgba(0, 0, 0, 0.15);
+    --accent: #9A8C73; /* Muted taupe/gold */
+    --accent-light: rgba(154, 140, 115, 0.15);
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background-color: var(--bg-base);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--accent-light); color: var(--ink); }
+  a { color: inherit; text-decoration: none; }
+  
+  /* Elegant Loader */
+  #loader {
+    position: fixed; inset: 0; background: var(--bg-base); z-index: 1000;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .loader-text {
+    font-family: var(--font-display); font-size: 2rem; font-style: italic; color: var(--accent);
+    opacity: 0; transform: translateY(10px);
+  }
+
+  /* Three.js Fluid Background */
+  #bgCanvas { 
+    position: fixed; inset: 0; width: 100%; height: 100vh; z-index: 0; 
+    pointer-events: none; 
+    /* Massive blur creates a beautiful liquid gradient effect from 3D spheres */
+    filter: blur(80px) saturate(1.2); 
+    opacity: 0.6;
+  }
+
+  /* UI Grid Layout */
+  main { position: relative; z-index: 10; padding-bottom: 120px; }
+  section { position: relative; padding: 120px 24px 40px; min-height: 100vh; display: flex; align-items: center; }
+  .section-inner { max-width: 800px; margin: 0 auto; width: 100%; }
+  
+  @media (min-width: 961px) { .section-inner { margin-left: 18vw; } }
+
+  /* Typography */
+  .eyebrow { font-family: var(--font-body); color: var(--accent); letter-spacing: 0.15em; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 1.5rem; font-weight: 500; }
+  h1 { font-family: var(--font-display); font-size: clamp(3.5rem, 8vw, 6.5rem); font-weight: 400; letter-spacing: -0.02em; margin: 0 0 20px; line-height: 1.1; color: var(--ink); }
+  h1 i { font-style: italic; color: var(--accent); }
+  h2.section-title { font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 400; letter-spacing: -0.01em; margin: 0 0 50px; color: var(--ink); display: flex; align-items: center; gap: 20px;}
+  h2.section-title::after { content: ''; height: 1px; flex-grow: 1; background: var(--line); max-width: 200px; }
+  .lede { color: var(--ink-dim); font-size: 1.2rem; line-height: 1.8; max-width: 540px; margin-bottom: 40px; }
+
+  /* Minimal Buttons */
+  .btn {
+    font-family: var(--font-body); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 16px 36px; position: relative; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+    background: transparent; border: 1px solid var(--line-strong); color: var(--ink); transition: all 0.4s ease;
+    border-radius: 40px; overflow: hidden;
+  }
+  .btn::before {
+    content: ''; position: absolute; inset: 0; background: var(--accent); border-radius: 40px;
+    transform: scaleY(0); transform-origin: bottom; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: -1;
+  }
+  .btn:hover { color: #fff; border-color: var(--accent); }
+  .btn:hover::before { transform: scaleY(1); }
+  .hero-cta { display: flex; gap: 16px; margin-top: 50px; }
+
+  /* Nav Rail */
+  .rail { position: fixed; left: 60px; top: 50%; transform: translateY(-50%); z-index: 50; }
+  .rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 35px; position: relative; }
+  .rail a { 
+    display: flex; align-items: center; font-family: var(--font-body); font-size: 0.7rem; font-weight: 500; 
+    letter-spacing: 0.15em; color: var(--ink-faint); text-transform: uppercase; transition: 0.4s ease;
+    writing-mode: vertical-rl; transform: rotate(180deg);
+  }
+  .rail a.active { color: var(--ink); transform: rotate(180deg) scale(1.1); }
+  @media (max-width: 960px) { .rail { display: none; } }
+
+  /* Soft Glass Cards */
+  .panel {
+    background: var(--bg-panel); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.8); border-radius: 16px; padding: 40px; margin-bottom: 24px; 
+    position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.03); cursor: pointer; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .panel:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(0,0,0,0.06); background: rgba(255,255,255,0.7); border-color: #fff; }
+  
+  /* Timeline specific */
+  .job-tag { font-family: var(--font-body); font-weight: 500; font-size: 0.65rem; color: var(--accent); background: var(--accent-light); padding: 6px 12px; border-radius: 20px; margin-bottom: 20px; display: inline-block; letter-spacing: 0.1em; text-transform: uppercase;}
+  .job-dates { font-family: var(--font-body); font-size: 0.8rem; color: var(--ink-faint); display: block; margin-bottom: 12px; font-weight: 400;}
+  .panel h3 { font-family: var(--font-display); font-size: 1.8rem; margin: 0 0 10px 0; font-weight: 500; }
+  .panel h3 span { color: var(--accent); font-style: italic; font-weight: 400;}
+
+  /* Projects Grid */
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+  .pill { 
+    font-family: var(--font-body); font-size: 0.65rem; color: var(--ink-dim); 
+    border: 1px solid var(--line-strong); padding: 6px 12px; border-radius: 20px; 
+    margin-right: 8px; margin-top: 15px; display: inline-block; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+
+  /* Stack Grid */
+  .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; }
+  .stack-group h4 { font-family: var(--font-display); font-size: 1.3rem; color: var(--ink); border-bottom: 1px solid var(--line); padding-bottom: 15px; margin-bottom: 20px; font-weight: 500;}
+  .stack-group .pill { border: none; background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 8px; }
+
+  /* Elegant Modal Window */
+  #modalOverlay {
+    position: fixed; inset: 0; background: rgba(247, 245, 240, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+    z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px;
+    opacity: 0; pointer-events: none; transition: opacity 0.6s ease;
+  }
+  #modalOverlay.active { opacity: 1; pointer-events: all; }
+  .modal-window {
+    background: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,1); border-radius: 24px; width: 100%; max-width: 650px;
+    padding: 60px; position: relative; transform: translateY(30px) scale(0.98);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+  }
+  .modal-close {
+    position: absolute; top: 30px; right: 30px; background: transparent; border: none;
+    color: var(--ink-dim); width: 40px; height: 40px; cursor: pointer; font-family: var(--font-body); font-weight: 300; font-size: 1.2rem; transition: 0.4s;
+  }
+  .modal-close:hover { color: var(--ink); transform: rotate(90deg); }
+  
+  /* Utilities */
+  .reveal { opacity: 0; }
+</style>
+</head>
+<body>
+
+<!-- Elegant Loader -->
+<div id="loader">
+  <div class="loader-text" id="loaderText">R.S.</div>
+</div>
+
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+<nav class="rail" aria-label="Section navigation">
+  <ol>
+    <li><a href="#origin" data-label="Origin">Origin</a></li>
+    <li><a href="#profile" data-label="Profile">Profile</a></li>
+    <li><a href="#timeline" data-label="Timeline">Timeline</a></li>
+    <li><a href="#builds" data-label="Builds">Builds</a></li>
+    <li><a href="#stack" data-label="Stack">Stack</a></li>
+  </ol>
+</nav>
+
+<main>
+  <section id="origin">
+    <div class="section-inner">
+      <p class="eyebrow reveal">Software Engineer</p>
+      <h1 class="reveal">Reetik <i>Sharma</i></h1>
+      <p class="lede reveal">Backend-leaning full-stack engineer. Developing highly reliable, secure infrastructure for financial institutions, government agencies, and enterprise grids.</p>
+      
+      <div class="hero-cta reveal">
+        <a class="btn" href="#timeline">Explore Timeline</a>
+        <a class="btn" href="mailto:sharmars.reetik@gmail.com" style="background: var(--ink); color: #fff; border-color: var(--ink);">Contact</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="profile">
+    <div class="section-inner">
+      <h2 class="section-title reveal">Profile</h2>
+      <div class="panel reveal">
+        <p class="lede" style="margin:0; font-size: 1.15rem;">Executing at the intersection of scale and security. I've deployed digital document signing, automated large-scale reconciliation, and architected core banking disbursement schemes currently powering operations across 100,000+ national bank branches.</p>
+        <div style="display:flex; gap: 40px; margin-top: 40px; font-family: var(--font-body); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">
+          <div><span style="color:var(--ink-faint); display:block; margin-bottom:4px; font-size:0.7rem;">Location</span> <span style="font-weight: 500;">Pune, IN</span></div>
+          <div><span style="color:var(--ink-faint); display:block; margin-bottom:4px; font-size:0.7rem;">Role</span> <span style="font-weight: 500;">Senior Dev <i>@</i> Citi</span></div>
+          <div><span style="color:var(--ink-faint); display:block; margin-bottom:4px; font-size:0.7rem;">Stack</span> <span style="font-weight: 500;">Java / Spring / Cloud</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <div class="section-inner">
+      <h2 class="section-title reveal">Experience</h2>
+      
+      <div class="panel reveal modal-trigger" data-title="Citi" data-role="Senior Software Engineer" data-tags="Banking Infrastructure, Java, Spring Boot" data-content="Joined Citi's technology organisation in Pune (Hybrid). Working on backend systems and robust APIs behind global banking operations. Integrating Java, Spring Boot, and cloud-native practices from prior fintech/government-scale systems into a large, security-first enterprise environment.">
+        <span class="job-tag">Current</span>
+        <span class="job-dates">Feb 08, 2026 — Present</span>
+        <h3>Software Engineer <span>@ Citi</span></h3>
+        <p style="font-size: 0.85rem; color: var(--accent); font-family: var(--font-body); margin-top: 15px;">Read more &rarr;</p>
+      </div>
+
+      <div class="panel reveal modal-trigger" data-title="EY" data-role="Senior Consultant" data-tags="Government Systems, FinTech, Consulting" data-content="Concluded tenure in early 2026. Architected and managed high-level financial technology initiatives and complex government systems. Ensured high availability and stringent compliance standards for distributed platforms.">
+        <span class="job-dates">Ended Feb 06, 2026</span>
+        <h3>Senior Consultant <span>@ EY</span></h3>
+        <p style="font-size: 0.85rem; color: var(--accent); font-family: var(--font-body); margin-top: 15px;">Read more &rarr;</p>
+      </div>
+
+      <div class="panel reveal modal-trigger" data-title="NSCS Pvt. Ltd." data-role="Software Engineer" data-tags="Java EE, Microservices, Docker, AWS/GCP" data-content="Led delivery across 12+ concurrent enterprise projects managing up to 15 engineers. Designed RESTful APIs for a 100k+ line Java codebase. Delivered state-wide government disbursement schemes (5 states, 500+ branches). Migrated deployments to Docker/Microservices across AWS/GCP, cutting deployment times significantly.">
+        <span class="job-dates">Aug 2021 — Feb 2026</span>
+        <h3>Software Engineer <span>@ NSCS</span></h3>
+        <p style="font-size: 0.85rem; color: var(--accent); font-family: var(--font-body); margin-top: 15px;">Read more &rarr;</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="builds">
+    <div class="section-inner">
+      <h2 class="section-title reveal">Selected Work</h2>
+      <div class="projects-grid">
+        
+        <div class="panel reveal modal-trigger" data-title="GST Audit System" data-role="Himachal Pradesh Gov" data-tags="Spring Boot, Microservices, GovTech" data-content="Developed a comprehensive management system for the Excise & Taxation Department of Himachal Pradesh. Built using Spring Boot microservices to handle large-scale tax data, audit tracking, and automated enforcement protocols securely.">
+          <span class="job-dates">GovTech Application</span>
+          <h3>GST Audit System</h3>
+          <span class="pill">Microservices</span> <span class="pill">Spring Boot</span>
+        </div>
+
+        <div class="panel reveal modal-trigger" data-title="CSS-SNA (PFMS)" data-role="Direct Benefit Transfer" data-tags="GovTech, PFMS, Integration, Java" data-content="Implemented Central Sponsored Schemes as a Single Nodal Agency under the Public Financial Management System (PFMS). Handled direct benefit transfers (DBT) to vendors and beneficiaries, securely integrating with central and internal core banking systems.">
+          <span class="job-dates">Financial Integration</span>
+          <h3>CSS-SNA</h3>
+          <span class="pill">PFMS API</span> <span class="pill">Core Banking</span>
+        </div>
+
+        <div class="panel reveal modal-trigger" data-title="eMaps & CobaSys" data-role="Enterprise Platforms" data-tags="ERP, Fintech, Real-time Automation" data-content="Architected a full ERP platform for accounting and inventory, automating payables and ledgers. Paired with CobaSys, a budget and fund-management ERP providing real-time visibility into financial allocations, reducing manual forecasting efforts by 50%.">
+          <span class="job-dates">Resource Planning</span>
+          <h3>eMaps / CobaSys</h3>
+          <span class="pill">ERP System</span> <span class="pill">FinTech</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="stack">
+    <div class="section-inner">
+      <h2 class="section-title reveal">Capabilities</h2>
+      <div class="stack-grid">
+        <div class="stack-group reveal">
+          <h4>Core Languages</h4>
+          <span class="pill">Java</span> <span class="pill">JavaScript</span> <span class="pill">Python</span> <span class="pill">C++</span> <span class="pill">SQL</span>
+        </div>
+        <div class="stack-group reveal">
+          <h4>Frameworks</h4>
+          <span class="pill">Spring Boot</span> <span class="pill">Hibernate</span> <span class="pill">Apache Struts</span> <span class="pill">EJB</span>
+        </div>
+        <div class="stack-group reveal">
+          <h4>Infrastructure</h4>
+          <span class="pill">AWS</span> <span class="pill">GCP</span> <span class="pill">Docker</span> <span class="pill">Microservices</span>
+        </div>
+        <div class="stack-group reveal">
+          <h4>Compute Focus</h4>
+          <span class="pill">Local AI / Gemma</span> <span class="pill">Multi-GPU</span> <span class="pill">Workstation Builds</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Elegant Slide/Fade Modal -->
+<div id="modalOverlay">
+  <div class="modal-window" id="modalWindow">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div style="font-family: var(--font-body); color: var(--accent); font-size: 0.8rem; margin-bottom: 8px; text-transform: uppercase; font-weight: 500; letter-spacing: 0.1em;" id="modalTags"></div>
+    <h3 id="modalTitle" style="font-family: var(--font-display); font-size: 2.8rem; font-weight: 400; margin: 0; color: var(--ink);"></h3>
+    <p id="modalRole" style="font-family: var(--font-display); font-size: 1.4rem; font-style: italic; color: var(--ink-dim); margin: 5px 0 30px 0; border-bottom: 1px solid var(--line); padding-bottom: 20px;"></p>
+    <p id="modalContent" style="color: var(--ink-dim); line-height: 1.8; font-size: 1.1rem; font-weight: 300;"></p>
+  </div>
+</div>
+
+<script>
+  // --- Elegant Boot Sequence ---
+  window.addEventListener('load', () => {
+    // Fade in text
+    anime({
+      targets: '#loaderText',
+      opacity: 1,
+      translateY: 0,
+      duration: 1000,
+      easing: 'easeOutQuart',
+      complete: function() {
+        // Hold, then fade out background
+        anime({
+          targets: '#loader',
+          opacity: 0,
+          delay: 500,
+          duration: 1200,
+          easing: 'easeInOutQuad',
+          complete: function() {
+            document.getElementById('loader').style.display = 'none';
+            // Staggered cinematic reveal of hero content
+            anime({
+              targets: '#origin .reveal',
+              translateY: [40, 0],
+              opacity: [0, 1],
+              delay: anime.stagger(200),
+              easing: 'easeOutQuart',
+              duration: 1500
+            });
+          }
+        });
+      }
+    });
+  });
+
+  // --- Scroll Reveal Animations ---
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+        entry.target.classList.add('animated');
+        anime({
+          targets: entry.target,
+          translateY: [40, 0],
+          opacity: [0, 1],
+          easing: 'easeOutQuart',
+          duration: 1200,
+          delay: entry.target.classList.contains('panel') ? 100 : 0
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    if(!el.closest('#origin')) observer.observe(el);
+  });
+
+  // --- Nav Rail Scrollspy ---
+  const sections = document.querySelectorAll('main section');
+  const navLinks = document.querySelectorAll('.rail a');
+  
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      if (scrollY >= sectionTop - 400) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href').includes(current)) {
+        link.classList.add('active');
+      }
+    });
+  });
+
+  // --- Soft Modal Interactions ---
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalWindow = document.getElementById('modalWindow');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalRole = document.getElementById('modalRole');
+  const modalTags = document.getElementById('modalTags');
+  const modalContent = document.getElementById('modalContent');
+  
+  document.querySelectorAll('.modal-trigger').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      modalTitle.innerText = trigger.dataset.title;
+      modalRole.innerText = trigger.dataset.role;
+      modalTags.innerText = trigger.dataset.tags;
+      modalContent.innerText = trigger.dataset.content;
+      
+      modalOverlay.classList.add('active');
+      anime({
+        targets: modalWindow,
+        scale: [0.95, 1],
+        translateY: [20, 0],
+        opacity: [0, 1],
+        easing: 'easeOutCubic',
+        duration: 600
+      });
+    });
+  });
+
+  document.getElementById('modalClose').addEventListener('click', () => {
+    anime({
+      targets: modalWindow,
+      scale: 0.98,
+      translateY: 20,
+      opacity: 0,
+      easing: 'easeOutCubic',
+      duration: 400,
+      complete: () => modalOverlay.classList.remove('active')
+    });
+  });
+
+  // --- Three.js Fluid Ambient Background ---
+  // We use large blurred geometric spheres moving slowly to create a soft, morphing gradient effect.
+  const canvas = document.getElementById('bgCanvas');
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.z = 15;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const orbs = [];
+  const orbGeometry = new THREE.SphereGeometry(4, 32, 32);
+  
+  // A palette of soft, warm aesthetic colors
+  const colors = [0xe8e4db, 0xdcd5c9, 0xc1b8a8, 0xe2dcd3];
+
+  for (let i = 0; i < 4; i++) {
+    const material = new THREE.MeshBasicMaterial({ 
+      color: colors[i], 
+      transparent: true, 
+      opacity: 0.8 
+    });
+    const orb = new THREE.Mesh(orbGeometry, material);
+    
+    // Random initial positions spread out
+    orb.position.x = (Math.random() - 0.5) * 20;
+    orb.position.y = (Math.random() - 0.5) * 15;
+    orb.position.z = (Math.random() - 0.5) * 5;
+    
+    // Store unique speeds and phases for organic movement
+    orb.userData = {
+      speedX: (Math.random() - 0.5) * 0.02,
+      speedY: (Math.random() - 0.5) * 0.02,
+      phaseOffset: Math.random() * Math.PI * 2
+    };
+    
+    scene.add(orb);
+    orbs.push(orb);
+  }
+
+  // Soft Parallax on Mouse Move
+  let targetX = 0, targetY = 0;
+  document.addEventListener('mousemove', (event) => {
+    targetX = (event.clientX - window.innerWidth / 2) * 0.005;
+    targetY = (event.clientY - window.innerHeight / 2) * 0.005;
+  });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  const clock = new THREE.Clock();
+
+  function animateThree() {
+    requestAnimationFrame(animateThree);
+    const elapsedTime = clock.getElapsedTime();
+    
+    // Gentle floating animation for each orb
+    orbs.forEach((orb, i) => {
+      orb.position.x += Math.sin(elapsedTime * 0.2 + orb.userData.phaseOffset) * 0.01;
+      orb.position.y += Math.cos(elapsedTime * 0.15 + orb.userData.phaseOffset) * 0.01;
+      
+      // Subtle scaling to simulate breathing/morphing
+      const scale = 1 + Math.sin(elapsedTime * 0.5 + i) * 0.1;
+      orb.scale.set(scale, scale, scale);
+    });
+
+    // Parallax camera movement
+    camera.position.x += (targetX - camera.position.x) * 0.02;
+    camera.position.y += (-targetY - camera.position.y) * 0.02;
+    camera.lookAt(scene.position);
+
+    renderer.render(scene, camera);
+  }
+  
+  animateThree();
+
+</script>
+</body>
+</html>
