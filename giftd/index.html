@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gift Dental Co. — Dental Supplies, Equipment &amp; Instruments · Ludhiana</title>
+<meta name="description" content="Gift Dental Co., Ludhiana — dental supplies, equipment and instruments across 20+ categories and 17+ brands. Call or WhatsApp to order.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#13211F;
+    --teal:#1F5C55;
+    --teal-deep:#0E2E2A;
+    --teal-pale:#DCE7E3;
+    --paper:#EEEFE8;
+    --card:#FBFBF6;
+    --signal:#AE3629;
+    --brass:#9C7A38;
+    --steel:#5C7472;
+    --line: rgba(14,46,42,0.16);
+    --line-strong: rgba(14,46,42,0.32);
+    --shadow: 0 1px 2px rgba(14,46,42,0.06);
+    --radius: 3px;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+
+  /* ---------- motion: keyframes ---------- */
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
+  @keyframes growLine{ to{ width:22px; } }
+  @keyframes drift{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-5px); } }
+
+  /* ---------- motion: scroll reveal ---------- */
+  .reveal{ opacity:0; transform:translateY(20px); transition:opacity .6s cubic-bezier(.2,.7,.2,1), transform .6s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* ---------- motion: hero load sequence ---------- */
+  .hero .hcol > .eyebrow{ animation:fadeUp .6s cubic-bezier(.2,.7,.2,1) both; }
+  .hero .hcol > h1{ animation:fadeUp .65s cubic-bezier(.2,.7,.2,1) .09s both; }
+  .hero .hcol > p.lead{ animation:fadeUp .65s cubic-bezier(.2,.7,.2,1) .18s both; }
+  .hero .hcol > .cta-row{ animation:fadeUp .65s cubic-bezier(.2,.7,.2,1) .27s both; }
+  .hero .spec-card{ animation:fadeUp .7s cubic-bezier(.2,.7,.2,1) .22s both; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:16px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk', 'IBM Plex Sans', sans-serif;
+    margin:0; font-weight:600; letter-spacing:-0.01em;
+  }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  a{ color:inherit; }
+  button{ font-family:inherit; }
+  :focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  img{ max-width:100%; display:block; }
+
+  /* ---------- utility bar ---------- */
+  .utility{
+    background:var(--teal-deep); color:#EDEFE9;
+    font-size:12.5px; letter-spacing:.02em;
+  }
+  .utility-inner{
+    max-width:1240px; margin:0 auto; padding:7px 24px;
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
+    flex-wrap:wrap;
+  }
+  .utility a{ color:#EDEFE9; text-decoration:none; }
+  .utility .u-links{ display:flex; gap:18px; flex-wrap:wrap; }
+  .utility .u-links span.sep{ opacity:.35; margin-right:18px; }
+
+  /* ---------- header ---------- */
+  .site-header{
+    background:var(--paper); border-bottom:1px solid var(--line-strong);
+    position:sticky; top:0; z-index:50;
+    transition:box-shadow .3s ease, background .3s ease;
+  }
+  .site-header.scrolled{ box-shadow:0 4px 16px rgba(14,46,42,0.10); }
+  .site-header-inner{
+    max-width:1240px; margin:0 auto; padding:16px 24px;
+    display:flex; align-items:center; justify-content:space-between; gap:24px;
+  }
+  .brand-mark{ display:flex; align-items:center; gap:12px; text-decoration:none; }
+  .brand-mark .glyph{
+    width:38px; height:38px; border:1.5px solid var(--ink); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; position:relative; flex:none;
+    transition:transform .35s cubic-bezier(.34,1.56,.64,1), border-color .3s ease;
+  }
+  .brand-mark .glyph::before{
+    content:"+"; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:20px; color:var(--teal);
+  }
+  .brand-mark:hover .glyph{ transform:rotate(90deg) scale(1.08); border-color:var(--teal); }
+  .brand-mark .wordmark{ line-height:1.05; }
+  .brand-mark .wordmark .name{ font-size:19px; font-weight:700; }
+  .brand-mark .wordmark .tag{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--steel); margin-top:2px;
+  }
+  .main-nav{ display:flex; align-items:center; gap:28px; }
+  .main-nav a{
+    text-decoration:none; font-size:14px; font-weight:500; color:var(--ink);
+    border-bottom:1px solid transparent; padding-bottom:2px;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .main-nav a:hover{ border-color:var(--teal); }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; font-size:13.5px; font-weight:600;
+    padding:10px 18px; border-radius:var(--radius); text-decoration:none; white-space:nowrap;
+    border:1px solid transparent; cursor:pointer;
+    transition:transform .2s cubic-bezier(.2,.7,.2,1), background .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .btn:hover{ transform:translateY(-2px); box-shadow:0 8px 18px rgba(14,46,42,0.16); }
+  .btn:active{ transform:translateY(0); box-shadow:none; }
+  .btn-primary{ background:var(--teal); color:#F3F5EF; }
+  .btn-primary:hover{ background:var(--teal-deep); }
+  .btn-outline{ border-color:var(--line-strong); color:var(--ink); background:transparent; }
+  .btn-outline:hover{ border-color:var(--ink); }
+  .btn-signal{ background:var(--signal); color:#FBEFED; }
+  .btn-signal:hover{ background:#8f2c22; }
+  .menu-toggle{ display:none; }
+
+  /* ---------- layout w/ index rail ---------- */
+  .layout{ max-width:1240px; margin:0 auto; padding:0 24px; display:flex; gap:40px; align-items:flex-start; }
+  .index-rail{
+    width:236px; flex:none; position:sticky; top:73px;
+    padding:28px 0 40px; border-right:1px solid var(--line);
+    max-height:calc(100vh - 73px); overflow-y:auto;
+  }
+  .index-rail .rail-label{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--steel); margin-bottom:14px; display:block;
+  }
+  .rail-list-wrap{ position:relative; }
+  .index-rail ol{ list-style:none; margin:0; padding:0; }
+  .index-rail li{ margin-bottom:2px; }
+  .rail-indicator{
+    position:absolute; left:0; top:0; width:2px; height:0; background:var(--teal);
+    border-radius:2px; opacity:0; pointer-events:none;
+    transition:transform .4s cubic-bezier(.65,0,.35,1), height .3s ease, opacity .25s ease;
+  }
+  .rail-btn{
+    display:flex; align-items:baseline; gap:10px; width:100%; text-align:left;
+    background:none; border:none; padding:8px 10px; border-left:2px solid transparent;
+    cursor:pointer; color:var(--ink); border-radius:0 var(--radius) var(--radius) 0;
+    transition:background .25s ease, transform .2s ease;
+  }
+  .rail-btn .num{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--steel); flex:none; width:18px; transition:color .25s ease; }
+  .rail-btn .lbl{ font-size:13.5px; font-weight:500; flex:1; transition:color .25s ease; }
+  .rail-btn .ct{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--steel); }
+  .rail-btn:hover{ background:var(--teal-pale); transform:translateX(2px); }
+  .rail-btn.active{ background:var(--teal-pale); }
+  .rail-btn.active .lbl{ color:var(--teal-deep); font-weight:600; }
+  .rail-btn.active .num{ color:var(--brass); }
+  .rail-foot{ margin-top:18px; padding:14px 10px 0; border-top:1px dashed var(--line-strong); }
+  .rail-foot a{ font-size:12.5px; color:var(--teal-deep); text-decoration:none; font-weight:600; }
+
+  main{ flex:1; min-width:0; padding-bottom:80px; }
+
+  /* ---------- hero ---------- */
+  .hero{
+    display:grid; grid-template-columns:1.15fr 0.85fr; gap:48px;
+    padding:56px 0 48px; border-bottom:1px solid var(--line);
+    align-items:start;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--teal-deep); display:flex; align-items:center; gap:10px; margin-bottom:18px;
+  }
+  .eyebrow::before{ content:""; width:0; height:1px; background:var(--brass); display:inline-block; animation:growLine .5s ease .55s forwards; }
+  .hero h1{ font-size:44px; line-height:1.06; max-width:15ch; }
+  .hero h1 em{ font-style:normal; color:var(--teal); }
+  .hero p.lead{ font-size:16.5px; color:#33453F; max-width:46ch; margin-top:18px; }
+  .hero .cta-row{ display:flex; gap:12px; margin-top:28px; flex-wrap:wrap; }
+
+  .spec-card{
+    background:var(--card); border:1px solid var(--line-strong); border-radius:var(--radius);
+    box-shadow:var(--shadow);
+  }
+  .spec-card .spec-head{
+    background:var(--teal-deep); color:#EDEFE9; padding:12px 18px;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    display:flex; justify-content:space-between;
+  }
+  .spec-card dl{ margin:0; padding:6px 18px 14px; }
+  .spec-row{ display:flex; justify-content:space-between; gap:16px; padding:11px 0; border-bottom:1px dashed var(--line); }
+  .spec-row:last-child{ border-bottom:none; }
+  .spec-row dt{ font-size:13px; color:var(--steel); }
+  .spec-row dd{ margin:0; font-family:'IBM Plex Mono',monospace; font-size:13.5px; font-weight:500; text-align:right; }
+
+  /* ---------- section headers ---------- */
+  .cat-section{ padding:52px 0; border-bottom:1px solid var(--line); scroll-margin-top:86px; }
+  .cat-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:26px; flex-wrap:wrap; }
+  .cat-head .num-tag{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--brass); letter-spacing:.08em;
+    display:block; margin-bottom:6px;
+  }
+  .cat-head h2{ font-size:27px; }
+  .cat-head .blurb{ font-size:14px; color:#3C4D47; max-width:56ch; margin-top:6px; }
+  .cat-count{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--steel);
+    border:1px solid var(--line-strong); padding:6px 12px; border-radius:var(--radius); white-space:nowrap;
+  }
+
+  .product-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .p-card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px 16px 14px; display:flex; flex-direction:column; gap:8px; position:relative;
+    transition:transform .28s cubic-bezier(.2,.7,.2,1), box-shadow .28s ease, border-color .28s ease;
+  }
+  .p-card:hover{ transform:translateY(-5px); box-shadow:0 16px 30px rgba(14,46,42,0.14); border-color:var(--teal); }
+  .count-num{ display:inline-block; min-width:1ch; }
+  .p-card .p-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+  .p-brand{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--teal-deep); font-weight:600;
+  }
+  .p-tag{
+    font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.06em; text-transform:uppercase;
+    background:var(--signal); color:#FBEFED; padding:2px 6px; border-radius:2px;
+  }
+  .p-name{ font-family:'Space Grotesk',sans-serif; font-size:14.5px; font-weight:600; line-height:1.3; min-height:2.6em; }
+  .p-specs{ list-style:none; margin:2px 0 0; padding:0; font-size:11.5px; color:var(--steel); }
+  .p-specs li{ padding:1px 0; }
+  .p-specs li::before{ content:"— "; color:var(--brass); }
+  .p-desc{ font-size:12px; color:#3C4D47; line-height:1.45; margin:0; }
+  .p-bottom{ display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding-top:10px; border-top:1px dashed var(--line); }
+  .p-price{ font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:600; color:var(--ink); }
+  .p-mrp{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--steel); text-decoration:line-through; margin-right:6px; }
+  .p-stock{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; }
+  .p-stock.in{ color:var(--teal-deep); }
+  .p-stock.out{ color:var(--signal); }
+
+  .more-section{ padding:52px 0; border-bottom:1px solid var(--line); }
+  .more-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:22px; }
+  .more-card{
+    display:flex; justify-content:space-between; gap:14px; align-items:center;
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px;
+    transition:transform .25s cubic-bezier(.2,.7,.2,1), border-color .25s ease;
+  }
+  .more-card:hover{ transform:translateY(-3px); border-color:var(--brass); }
+  .more-card h4{ font-size:14.5px; }
+  .more-card p{ margin:4px 0 0; font-size:12.5px; color:var(--steel); max-width:40ch; }
+  .more-card .ct{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--brass); white-space:nowrap; }
+
+  /* ---------- brands ---------- */
+  .brands-section{ padding:52px 0; border-bottom:1px solid var(--line); }
+  .brand-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-top:24px; }
+  .brand-plate{
+    border:1px solid var(--line-strong); border-radius:var(--radius); padding:16px 10px;
+    text-align:center; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13.5px;
+    background:var(--card); letter-spacing:.01em;
+    transition:transform .25s cubic-bezier(.2,.7,.2,1), background .25s ease, color .25s ease, border-color .25s ease;
+  }
+  .brand-plate:hover{ background:var(--teal-deep); color:#EDEFE9; border-color:var(--teal-deep); transform:translateY(-3px); }
+
+  /* ---------- trust ---------- */
+  .trust-section{ padding:52px 0; border-bottom:1px solid var(--line); }
+  .trust-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:22px; }
+  .trust-card{ border-left:2px solid var(--brass); padding:4px 0 4px 16px; transition:transform .25s ease, padding-left .25s ease; }
+  .trust-card:hover{ transform:translateX(2px); padding-left:20px; }
+  .trust-card h4{ font-size:14.5px; }
+  .trust-card p{ font-size:13px; color:#3C4D47; margin:6px 0 0; }
+
+  /* ---------- contact ---------- */
+  .contact-section{ padding:52px 0; }
+  .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:24px; }
+  .contact-card{ background:var(--card); border:1px solid var(--line-strong); border-radius:var(--radius); padding:22px; }
+  .contact-card h3{ font-size:17px; margin-bottom:14px; }
+  .contact-row{ display:flex; gap:12px; padding:9px 0; border-bottom:1px dashed var(--line); font-size:13.5px; }
+  .contact-row:last-child{ border-bottom:none; }
+  .contact-row .k{ color:var(--steel); width:88px; flex:none; font-family:'IBM Plex Mono',monospace; font-size:11.5px; text-transform:uppercase; letter-spacing:.05em; padding-top:2px; }
+  .contact-row .v a{ text-decoration:none; color:var(--teal-deep); font-weight:600; }
+  .map-frame{ border:1px solid var(--line-strong); border-radius:var(--radius); overflow:hidden; height:100%; min-height:280px; }
+  .map-frame iframe{ width:100%; height:100%; min-height:280px; border:0; display:block; }
+
+  /* ---------- footer ---------- */
+  footer{ background:var(--teal-deep); color:#D9DED6; padding:36px 0 24px; }
+  .footer-inner{ max-width:1240px; margin:0 auto; padding:0 24px; display:flex; justify-content:space-between; gap:32px; flex-wrap:wrap; }
+  .footer-col h5{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#9FB4AE; margin-bottom:12px; }
+  .footer-col ul{ list-style:none; margin:0; padding:0; }
+  .footer-col li{ font-size:13px; padding:4px 0; color:#D9DED6; }
+  .footer-bottom{ max-width:1240px; margin:28px auto 0; padding:16px 24px 0; border-top:1px solid rgba(255,255,255,0.12); font-size:12px; color:#8FA39D; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+
+  /* ---------- mobile ---------- */
+  @media (max-width: 980px){
+    .main-nav{ display:none; }
+    .hero{ grid-template-columns:1fr; }
+    .hero h1{ font-size:34px; max-width:none; }
+    .product-grid{ grid-template-columns:repeat(2,1fr); }
+    .more-grid{ grid-template-columns:1fr; }
+    .brand-grid{ grid-template-columns:repeat(3,1fr); }
+    .contact-grid{ grid-template-columns:1fr; }
+    .trust-grid{ grid-template-columns:1fr; }
+    .layout{ flex-direction:column; }
+    .index-rail{
+      position:sticky; top:64px; width:100%; max-height:none; border-right:none; border-bottom:1px solid var(--line);
+      padding:12px 0; overflow-x:auto; overflow-y:hidden; background:var(--paper); z-index:40;
+    }
+    .index-rail ol{ display:flex; gap:6px; }
+    .index-rail .rail-label{ display:none; }
+    .rail-indicator{ display:none; }
+    .rail-btn{ flex-direction:row; white-space:nowrap; border-left:none; border-bottom:2px solid transparent; border-radius:0; transform:none !important; }
+    .rail-btn.active{ border-bottom-color:var(--teal); background:none; }
+    .rail-foot{ display:none; }
+  }
+  @media (max-width: 600px){
+    .product-grid{ grid-template-columns:1fr; }
+    .brand-grid{ grid-template-columns:repeat(2,1fr); }
+    .utility-inner{ font-size:11.5px; }
+    .site-header-inner{ padding:14px 16px; }
+    .layout{ padding:0 16px; }
+    .hero h1{ font-size:28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="utility">
+  <div class="utility-inner">
+    <div class="u-links">
+      <span>79, Dugri Road, New Sant Fateh Singh Nagar, Opp. King Speed Resort, Ludhiana, Punjab 141002</span>
+    </div>
+    <div class="u-links">
+      <a href="tel:+91-98880-28199">Call +91-98880-28199</a>
+      <span class="sep"></span>
+      <a href="https://wa.me/919888028199?text=Hi%2C%20I%27d%20like%20to%20enquire%20about%20a%20product%20from%20your%20catalog." target="_blank" rel="noopener">WhatsApp Order</a>
+      <span class="sep"></span>
+      <a href="mailto:giftdental@gmail.com">giftdental@gmail.com</a>
+    </div>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand-mark" href="#top">
+      <span class="glyph" aria-hidden="true"></span>
+      <span class="wordmark">
+        <span class="name">GIFT DENTAL CO.</span>
+        <span class="tag">Supplies &amp; Equipment · Ludhiana</span>
+      </span>
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="#catalog-top">Catalog</a>
+      <a href="#brands">Brands</a>
+      <a href="#trust">Why Us</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="btn btn-primary" href="https://wa.me/919888028199?text=Hi%2C%20I%27d%20like%20to%20enquire%20about%20a%20product%20from%20your%20catalog." target="_blank" rel="noopener">WhatsApp Enquiry →</a>
+  </div>
+</header>
+
+<div class="layout" id="top">
+  <nav class="index-rail" id="index-rail" aria-label="Catalog categories">
+    <span class="rail-label">Catalog Index</span>
+    <div class="rail-list-wrap">
+      <span class="rail-indicator" id="rail-indicator" aria-hidden="true"></span>
+      <ol id="rail-list"></ol>
+    </div>
+    <div class="rail-foot"><a href="#more">+ specialty lines list</a></div>
+  </nav>
+
+  <main>
+    <section class="hero" id="catalog-top">
+      <div class="hcol">
+        <span class="eyebrow">Dental Supply Catalog · Ludhiana, Punjab</span>
+        <h1>Everything the modern dental chair <em>runs on.</em></h1>
+        <p class="lead">Gift Dental Co. stocks and supplies dental consumables, instruments and clinic
+          equipment to practices across Punjab — from endodontic files to chairside scanners, sourced
+          from established Indian and international brands.</p>
+        <div class="cta-row">
+          <a class="btn btn-signal" href="https://wa.me/919888028199?text=Hi%2C%20I%27d%20like%20to%20enquire%20about%20a%20product%20from%20your%20catalog." target="_blank" rel="noopener">Order on WhatsApp</a>
+          <a class="btn btn-outline" href="tel:+91-98880-28199">Call +91-98880-28199</a>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-head"><span>Catalog Specification</span><span id="spec-date"></span></div>
+        <dl id="spec-list"></dl>
+      </div>
+    </section>
+
+    <div id="cat-sections"></div>
+
+    <section class="more-section" id="more">
+      <div class="cat-head">
+        <div>
+          <span class="num-tag">SPECIALTY LINES</span>
+          <h2>More ranges, available on request</h2>
+          <p class="blurb">Smaller, specialised lines we carry — ask on WhatsApp or by phone for the current
+            list and pricing.</p>
+        </div>
+      </div>
+      <div class="more-grid" id="more-grid"></div>
+    </section>
+
+    <section class="brands-section" id="brands">
+      <div class="cat-head">
+        <div>
+          <span class="num-tag">AUTHORISED SUPPLY</span>
+          <h2>Brands we carry</h2>
+          <p class="blurb">Indian and international dental manufacturers stocked across the catalog above.</p>
+        </div>
+      </div>
+      <div class="brand-grid" id="brand-grid"></div>
+    </section>
+
+    <section class="trust-section" id="trust">
+      <div class="cat-head">
+        <div>
+          <span class="num-tag">HOW WE WORK</span>
+          <h2>Why clinics order from us</h2>
+        </div>
+      </div>
+      <div class="trust-grid" id="trust-grid"></div>
+    </section>
+
+    <section class="contact-section" id="contact">
+      <div class="cat-head">
+        <div>
+          <span class="num-tag">GET IN TOUCH</span>
+          <h2>Order, ask a question, or visit the counter</h2>
+        </div>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <h3>Contact details</h3>
+          <div id="contact-rows"></div>
+          <div class="cta-row" style="margin-top:16px;">
+            <a class="btn btn-signal" href="https://wa.me/919888028199?text=Hi%2C%20I%27d%20like%20to%20enquire%20about%20a%20product%20from%20your%20catalog." target="_blank" rel="noopener">WhatsApp</a>
+            <a class="btn btn-outline" href="https://goo.gl/maps/RMB95tbvzRLaC4uZ6" target="_blank" rel="noopener">Open in Maps</a>
+          </div>
+        </div>
+        <div class="map-frame">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13697.02399468807!2d75.8468818!3d30.8794988!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x3402ead5c62ee9f5!2sGift%20Dental%20Co.!5e0!3m2!1sen!2sin!4v1608272145351!5m2!1sen!2sin" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Gift Dental Co. location map"></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-col" style="max-width:280px;">
+      <h5>Gift Dental Co.</h5>
+      <p style="font-size:13px; line-height:1.5; color:#D9DED6; margin:0;">79, Dugri Road, New Sant Fateh Singh Nagar, Opp. King Speed Resort, Ludhiana, Punjab 141002</p>
+    </div>
+    <div class="footer-col">
+      <h5>Catalog</h5>
+      <ul id="footer-cats"></ul>
+    </div>
+    <div class="footer-col">
+      <h5>Information</h5>
+      <ul id="footer-policies"></ul>
+    </div>
+    <div class="footer-col">
+      <h5>Reach us</h5>
+      <ul>
+        <li>+91-98880-28199</li>
+        <li>giftdental@gmail.com</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span id="year"></span> Gift Dental Co. Concept redesign — built from the public catalog.</span>
+    <span>Ludhiana, Punjab</span>
+  </div>
+</footer>
+
+<script id="catalog-data" type="application/json">{"business": {"name": "Gift Dental Co.", "tagline": "Dental Supplies, Equipment & Instruments", "founded_context": "Ludhiana, Punjab", "address": "79, Dugri Road, New Sant Fateh Singh Nagar, Opp. King Speed Resort, Ludhiana, Punjab 141002", "phones": ["+91-98880-28199", "+91-92161-05099", "+91-161-2431099"], "whatsapp": "919888028199", "email": "giftdental@gmail.com", "hours": [{"days": "Monday \u2013 Saturday", "time": "9:00 AM \u2013 8:00 PM"}, {"days": "Sunday", "time": "11:00 AM \u2013 3:00 PM"}], "map_link": "https://goo.gl/maps/RMB95tbvzRLaC4uZ6", "source_url": "https://www.giftdentalco.com", "policies": ["About us", "Privacy Policy", "Shipping & Returns", "Terms & Conditions"], "perks": ["Secure Online Payments", "100% Quality Products", "Free Delivery for orders over Rs. 1500"]}, "brands": ["Bisco", "Care Endo", "Chesa Dental Care", "D-Tech", "DPI", "Fussen", "GC", "MAARC Dental", "MANI", "MDM", "Mothers Dental", "Ruthinium", "Septodont", "Shleen", "Ultradent Products Inc", "Vatech", "Woodpecker"], "categories": [{"slug": "endodontics", "name": "Endodontics", "count": 44, "verified": true, "blurb": "Root canal systems \u2014 rotary & hand files, obturation materials, sealers and irrigants."}, {"slug": "general-dentistry", "name": "General Dentistry", "count": 105, "verified": true, "blurb": "Everyday clinical consumables and instruments spanning restorative, diagnostic and preventive work."}, {"slug": "equipment", "name": "Equipment", "count": 20, "verified": true, "blurb": "Chairside equipment \u2014 endomotors, intraoral scanners & cameras, and clinic hardware."}, {"slug": "instruments", "name": "Instruments", "count": 40, "verified": true, "blurb": "Hand instruments, rotary systems, suction cannulas, loupes and protective eyewear."}, {"slug": "orthodontics", "name": "Orthodontics", "count": 20, "verified": true, "blurb": "Brackets, bonding adhesives, ligatures and orthodontic accessories."}, {"slug": "restorative", "name": "Restorative", "count": 57, "verified": true, "blurb": "Composites, bonding agents, glass ionomers, cements and alloy restoratives."}, {"slug": "prosthodontics", "name": "Prosthodontics", "count": 39, "verified": true, "blurb": "Teeth sets, articulating papers, periodontal dressings and prosthetic accessories."}, {"slug": "diagnostic", "name": "Diagnostic", "count": 17, "verified": true, "blurb": "Intraoral cameras & sensors, calipers, examination gloves and vital-signs devices."}, {"slug": "covid-protection", "name": "Covid Protection / PPE", "count": 17, "verified": true, "blurb": "Masks, face shields, goggles, gloves and surface disinfection equipment."}, {"slug": "dental-disposables", "name": "Dental Disposables", "count": 11, "verified": true, "blurb": "Single-use clinical consumables \u2014 matrix systems, sensor sleeves, shoe covers."}, {"slug": "surgical-dentistry", "name": "Surgical Dentistry", "count": 8, "verified": true, "blurb": "Surgical gowns, suction cannulas and consumables for minor oral surgery."}, {"slug": "laboratory", "name": "Laboratory", "count": 7, "verified": true, "blurb": "Lab-side materials \u2014 reinforcement mesh, base plates, technician gowns."}, {"slug": "miscellaneous", "name": "Miscellaneous", "count": 31, "verified": true, "blurb": "Cross-category consumables and clinic accessories that don't sit in one bucket."}, {"slug": "radiography", "name": "Radiography", "count": 11, "verified": false, "blurb": "Imaging accessories \u2014 sensor sleeves, PSP covers and radiographic consumables."}, {"slug": "preventive-dentistry", "name": "Preventive Dentistry", "count": 4, "verified": false, "blurb": "Prophylaxis pastes and preventive-care consumables."}, {"slug": "imlantology", "name": "Implantology", "count": 5, "verified": false, "blurb": "Implant-related instruments and consumables."}, {"slug": "impression-materials", "name": "Impression Materials", "count": 2, "verified": false, "blurb": "Impression compounds and related consumables."}, {"slug": "artificial-teeth-set", "name": "Artificial Teeth Set", "count": 2, "verified": false, "blurb": "Acrylic teeth sets for denture and prosthetic work."}, {"slug": "bleaching-materials", "name": "Bleaching Materials", "count": 1, "verified": false, "blurb": "In-office and take-home bleaching systems."}, {"slug": "intra-oral-camera", "name": "Intra Oral Camera", "count": 1, "verified": false, "blurb": "Chairside intraoral imaging cameras."}, {"slug": "intra-oral-scanner", "name": "Intra Oral Scanner", "count": 1, "verified": false, "blurb": "Digital intraoral scanning systems."}], "products": [{"slug": "sealmax-r", "name": "Sealmax \u2013R", "brand": null, "mrp": 1000, "price": 600, "sale": true, "stock": "in_stock", "cats": ["endodontics"], "primary": "endodontics"}, {"slug": "zirprophy", "name": "Zirprophy (Zirconium Silicate Prophylaxis Paste)", "brand": null, "mrp": 350, "price": 280, "sale": true, "stock": "in_stock", "cats": ["general-dentistry", "preventive-dentistry"], "primary": "general-dentistry"}, {"slug": "t-fill", "name": "T-Fill (Temporary Filling Material)", "brand": null, "mrp": 200, "price": 190, "sale": true, "stock": "in_stock", "cats": ["general-dentistry"], "primary": "general-dentistry"}, {"slug": "mani-jizai", "name": "Mani Jizai Rotary File System", "brand": "MANI", "mrp": 1700, "price": 1440, "sale": true, "stock": "in_stock", "cats": ["endodontics", "equipment"], "primary": "endodontics"}, {"slug": "endo-access-burs-mani", "name": "Endo Access Burs Mani", "brand": "MANI", "mrp": 250, "price": 200, "sale": true, "stock": "in_stock", "cats": ["equipment", "endodontics"], "primary": "endodontics"}, {"slug": "mani-gpr", "name": "Mani GPR (GP Removal Rotary Files)", "brand": "MANI", "mrp": 1000, "price": 890, "sale": true, "stock": "in_stock", "cats": ["endodontics"], "primary": "endodontics"}, {"slug": "mani-glide-finders", "name": "Mani Glide Finders Hand Files", "brand": "MANI", "mrp": 370, "price": 340, "sale": true, "stock": "in_stock", "cats": ["instruments", "surgical-dentistry"], "primary": "instruments"}, {"slug": "mani-bond", "name": "Mani Bond", "brand": "MANI", "mrp": 2700, "price": 1590, "sale": true, "stock": "in_stock", "cats": ["general-dentistry"], "primary": "general-dentistry"}, {"slug": "mani-bulk", "name": "Mani Bulk (Bulkfill Restorative Material)", "brand": "MANI", "mrp": 1440, "price": 850, "sale": true, "stock": "sold_out", "cats": ["general-dentistry"], "primary": "general-dentistry"}, {"slug": "mani-flo", "name": "Mani Flo (Flowable Composite)", "brand": "MANI", "mrp": 1710, "price": 840, "sale": true, "stock": "in_stock", "cats": ["general-dentistry"], "primary": "general-dentistry"}, {"slug": "mani-nano-composite-kit", "name": "Mani Nano Composite Kit", "brand": "MANI", "mrp": 7200, "price": 6100, "sale": true, "stock": "in_stock", "cats": ["general-dentistry"], "primary": "general-dentistry"}, {"slug": "shleen-eye-protection-seg01", "name": "SHleen Eye Protection Goggles SEG 01", "brand": "Shleen", "mrp": null, "price": 300, "sale": false, "stock": "in_stock", "cats": ["dental-disposables"], "tag": "Hot", "primary": "dental-disposables"}, {"slug": "shleen-mouth-mirrors", "name": "SHleen Mouth Mirror Tops", "brand": "Shleen", "mrp": null, "price": 650, "sale": false, "stock": "sold_out", "cats": ["diagnostic"], "primary": "diagnostic"}, {"slug": "shleen-root-elevators", "name": "SHleen Root Elevators Kit", "brand": "Shleen", "mrp": 4650, "price": 3700, "sale": true, "stock": "in_stock", "cats": ["dental-disposables"], "tag": "Hot", "primary": "dental-disposables"}, {"slug": "shleen-cheek-retractor", "name": "SHleen Cheek Retractor (Pack of 2)", "brand": "Shleen", "mrp": 200, "price": 150, "sale": true, "stock": "in_stock", "cats": ["general-dentistry", "instruments"], "tag": "Hot", "primary": "instruments"}, {"slug": "shleen-periosteal-elevator", "name": "SHleen Periosteal Elevator", "brand": "Shleen", "mrp": null, "price": 300, "sale": false, "stock": "in_stock", "cats": ["instruments"], "tag": "Hot", "primary": "instruments"}, {"slug": "alveogyl", "name": "Alveogyl", "brand": "Septodont", "mrp": 2500, "price": 2400, "sale": true, "stock": "sold_out", "cats": ["endodontics", "general-dentistry"], "primary": "endodontics"}, {"slug": "bisco-all-bond-universal", "name": "Bisco All-Bond Universal 6ml", "brand": "Bisco", "mrp": 6500, "price": 6200, "sale": true, "stock": "in_stock", "cats": ["endodontics", "general-dentistry", "orthodontics", "miscellaneous", "prosthodontics"], "primary": "general-dentistry"}, {"slug": "bisco-fortify", "name": "Bisco Fortify", "brand": "Bisco", "mrp": 3250, "price": 2850, "sale": true, "stock": "sold_out", "cats": ["endodontics", "general-dentistry", "orthodontics", "miscellaneous", "prosthodontics"], "primary": "general-dentistry"}, {"slug": "bisco-uni-etch", "name": "Bisco Uni-Etch (Pack of 4 Syringes)", "brand": "Bisco", "mrp": 3500, "price": 2950, "sale": true, "stock": "sold_out", "cats": ["endodontics", "general-dentistry", "orthodontics", "miscellaneous"], "primary": "general-dentistry"}, {"slug": "bisco-modelling-resin", "name": "Bisco Modelling Resin (2 Syringes Pack)", "brand": "Bisco", "mrp": 3850, "price": 3400, "sale": true, "stock": "in_stock", "cats": ["endodontics", "general-dentistry", "orthodontics", "restorative", "miscellaneous", "prosthodontics"], "primary": "restorative"}, {"slug": "calx", "name": "CalX", "brand": "MAARC Dental", "mrp": 250, "price": 150, "sale": true, "stock": "in_stock", "cats": ["endodontics", "equipment"], "primary": "endodontics"}, {"slug": "care-endo-path-files", "name": "Care Endo Ni-Ti Rotary Files \u2013 Path Files", "brand": "Care Endo", "mrp": 1500, "price": 1300, "sale": true, "stock": "in_stock", "cats": ["endodontics", "instruments"], "primary": "endodontics"}, {"slug": "care-endo-opener-sx", "name": "Care Endo Ni-Ti Rotary Files \u2013 Orifice Opener Sx", "brand": "Care Endo", "mrp": 1500, "price": 1300, "sale": true, "stock": "in_stock", "cats": ["endodontics", "instruments"], "primary": "endodontics"}, {"slug": "care-endo-assorted-sx-f3", "name": "Care Endo Ni-Ti Rotary Files \u2013 Assorted Pack (SX\u2013F3)", "brand": "Care Endo", "mrp": 1500, "price": 1300, "sale": true, "stock": "in_stock", "cats": ["endodontics", "instruments"], "primary": "endodontics"}, {"slug": "care-endo-refill-6", "name": "Care Endo Ni-Ti Rotary Files \u2013 Pack of 6", "brand": "Care Endo", "mrp": 1500, "price": 1300, "sale": true, "stock": "in_stock", "cats": ["endodontics", "instruments"], "primary": "endodontics"}, {"slug": "care-endo-vtaper-opener", "name": "Care Endo V-Taper Rotary Files \u2013 Orifice Opener #10/.03", "brand": "Care Endo", "mrp": 1500, "price": 1300, "sale": true, "stock": "in_stock", "cats": ["endodontics", "instruments"], "primary": "endodontics"}, {"slug": "care-endo-vtaper-6", "name": "Care Endo V-Taper Rotary Files \u2013 Pack of 6", "brand": "Care Endo", "mrp": 1500, "price": 1300, "sale": true, "stock": "in_stock", "cats": ["endodontics", "instruments"], "primary": "endodontics"}, {"slug": "care-endo-vtaper-refill", "name": "Care Endo V-Taper Rotary Files \u2013 Refill Packs", "brand": "Care Endo", "mrp": 1500, "price": 1300, "sale": true, "stock": "in_stock", "cats": ["endodontics", "instruments"], "primary": "endodontics"}, {"slug": "care-endo-vtaper-path-refill", "name": "Care Endo V-Taper Rotary Path Files \u2013 Refill Pack", "brand": "Care Endo", "mrp": 1500, "price": 1300, "sale": true, "stock": "in_stock", "cats": ["endodontics", "instruments"], "primary": "endodontics"}, {"slug": "magnifying-loupes-35x", "name": "3.5X Magnifying Loupes with Light", "brand": null, "mrp": 5700, "price": 4500, "sale": true, "stock": "in_stock", "cats": ["instruments", "general-dentistry", "orthodontics", "restorative", "prosthodontics", "diagnostic", "miscellaneous"], "primary": "instruments"}, {"slug": "disinfectant-spray-gun", "name": "Disinfectant Spray Gun", "brand": null, "mrp": 3500, "price": 2600, "sale": true, "stock": "in_stock", "cats": ["instruments", "equipment", "covid-protection", "surgical-dentistry", "miscellaneous"], "primary": "equipment"}, {"slug": "durr-suction-cannula", "name": "Durr Suction Cannula", "brand": null, "mrp": 1800, "price": 1500, "sale": true, "stock": "in_stock", "cats": ["instruments", "covid-protection", "surgical-dentistry"], "primary": "instruments"}, {"slug": "eye-protection-goggles-woodpecker", "name": "Eye Protection Goggles (Woodpecker)", "brand": "Woodpecker", "mrp": null, "price": 450, "sale": false, "stock": "in_stock", "cats": ["instruments", "orthodontics", "restorative", "diagnostic", "prosthodontics"], "primary": "instruments"}, {"slug": "articulating-paper-horseshoe", "name": "Articulating Paper (Horseshoe Shape)", "brand": "MAARC Dental", "mrp": 1575, "price": 1250, "sale": true, "stock": "in_stock", "cats": ["general-dentistry", "equipment", "prosthodontics"], "primary": "prosthodontics"}, {"slug": "ceramic-ortho-brackets", "name": "Ceramic Orthodontic Brackets", "brand": "Miscellaneous", "mrp": 1000, "price": 500, "sale": true, "stock": "in_stock", "cats": ["equipment", "orthodontics", "miscellaneous"], "primary": "orthodontics"}, {"slug": "composite-organizer-stand", "name": "Composite Organizer Stand", "brand": "Miscellaneous", "mrp": 850, "price": 550, "sale": true, "stock": "sold_out", "cats": ["equipment", "orthodontics", "restorative", "prosthodontics", "surgical-dentistry", "laboratory", "miscellaneous"], "primary": "equipment"}, {"slug": "endo-paste", "name": "Endo Paste", "brand": "MAARC Dental", "mrp": 250, "price": 150, "sale": true, "stock": "in_stock", "cats": ["equipment"], "primary": "equipment"}, {"slug": "endo-smart-endomotor-woodpecker", "name": "Endo Smart Cordless Endomotor by Woodpecker", "brand": "Woodpecker", "mrp": 22000, "price": 17999, "sale": true, "stock": "in_stock", "cats": ["equipment", "miscellaneous", "endodontics"], "description": "Cordless endomotor with real-time feedback and dynamic torque control for automatic reverse, reducing rotary file breakage.", "specs": ["Torque: 0.6 Ncm \u2013 5.0 Ncm", "Speed: 100\u20131000 rpm", "Reciprocating motion", "9 user-defined modes", "6 angle options, autoclavable handpiece", "Auto reverse", "Wireless charging"], "primary": "equipment"}, {"slug": "ez-scan-vatech", "name": "EZ Scan \u2013 Vatech Intra Oral Scanner", "brand": "Vatech", "mrp": 1200000, "price": 995000, "sale": true, "stock": "in_stock", "cats": ["equipment", "diagnostic", "orthodontics", "intra-oral-scanner"], "primary": "equipment"}, {"slug": "intra-oral-camera-ez-cam-vatech", "name": "Intra Oral Camera \u2013 EZ Cam (Vatech)", "brand": "Vatech", "mrp": 45000, "price": 43000, "sale": true, "stock": "in_stock", "cats": ["equipment", "diagnostic", "orthodontics", "intra-oral-camera"], "primary": "equipment"}, {"slug": "ligature-ties", "name": "Ligature Ties", "brand": "Miscellaneous", "mrp": 450, "price": 250, "sale": true, "stock": "in_stock", "cats": ["equipment"], "primary": "orthodontics"}, {"slug": "all-in-one-dental-model", "name": "All-in-One Dental Model", "brand": "Shleen", "mrp": 1800, "price": 1050, "sale": true, "stock": "in_stock", "cats": ["orthodontics", "restorative", "prosthodontics", "miscellaneous"], "primary": "prosthodontics"}, {"slug": "farci-orthobond-kit", "name": "FARCI Orthobond Light Cure Orthodontic Adhesive Kit \u2013 Standard", "brand": "Mothers Dental", "mrp": null, "price": 4000, "sale": false, "stock": "sold_out", "cats": ["orthodontics"], "primary": "orthodontics"}, {"slug": "gc-g-aenial-flo-refills", "name": "GC G-Aenial Universal Flo Syringe Refills", "brand": "GC", "mrp": null, "price": 1000, "price_max": 3700, "sale": false, "stock": "sold_out", "cats": ["orthodontics"], "primary": "orthodontics"}, {"slug": "d-tech-iono-set", "name": "D-Tech Iono-Set Universal Glass Ionomer Liquid 15gm", "brand": "D-Tech", "mrp": 350, "price": 280, "sale": true, "stock": "sold_out", "cats": ["restorative", "miscellaneous"], "primary": "restorative"}, {"slug": "dpi-silver-alloy", "name": "DPI Silver Alloy Fine Grain 30gms", "brand": "DPI", "mrp": 2950, "price": 2900, "sale": true, "stock": "in_stock", "cats": ["restorative"], "primary": "restorative"}, {"slug": "farci-nano-hybrid-composite", "name": "Farci Nano Hybrid Composite A2 Syringe 2gm", "brand": "Mothers Dental", "mrp": null, "price": 550, "sale": false, "stock": "sold_out", "cats": ["restorative"], "primary": "restorative"}, {"slug": "farci-bond-v", "name": "FARCI Bond V Total Etch Light Cure Adhesive", "brand": "Mothers Dental", "mrp": null, "price": 1250, "sale": false, "stock": "sold_out", "cats": ["restorative"], "primary": "restorative"}, {"slug": "farci-bond-vii", "name": "FARCI Bond VII Self Etch Light Cure Adhesive", "brand": "Mothers Dental", "mrp": null, "price": 2750, "sale": false, "stock": "sold_out", "cats": ["restorative"], "primary": "restorative"}, {"slug": "farci-stream-nano-flowable", "name": "FARCI Stream Nano Flowable Light Cure Composite", "brand": "Mothers Dental", "mrp": null, "price": 850, "sale": false, "stock": "sold_out", "cats": ["restorative"], "primary": "restorative"}, {"slug": "g-cem-one-paste-pak", "name": "G-Cem One Paste Pak", "brand": "GC", "mrp": 5850, "price": 5500, "sale": true, "stock": "sold_out", "cats": ["restorative"], "primary": "restorative"}, {"slug": "fabric-mask-3layer", "name": "3-Layered Fabric Mask", "brand": null, "mrp": null, "price": 20, "sale": false, "stock": "in_stock", "cats": ["general-dentistry", "covid-protection", "diagnostic", "miscellaneous"], "primary": "covid-protection"}, {"slug": "dr-shield-face-shield", "name": "Dr. Shield Face Shield (by Studds)", "brand": "Studds", "mrp": null, "price": 350, "sale": false, "stock": "in_stock", "cats": ["covid-protection"], "primary": "covid-protection"}, {"slug": "kn95-face-masks", "name": "KN95 Face Masks", "brand": null, "mrp": 100, "price": 30, "sale": true, "stock": "in_stock", "cats": ["covid-protection", "diagnostic", "dental-disposables", "laboratory"], "primary": "covid-protection"}, {"slug": "patient-apron-poly", "name": "Patient Apron, Poly Disposable (Pack of 10)", "brand": null, "mrp": 300, "price": 200, "sale": true, "stock": "in_stock", "cats": ["covid-protection", "surgical-dentistry", "laboratory"], "primary": "covid-protection"}, {"slug": "pulse-oximeter", "name": "Pulse Oximeter", "brand": null, "mrp": 1500, "price": 950, "sale": true, "stock": "in_stock", "cats": ["covid-protection", "diagnostic"], "primary": "covid-protection"}, {"slug": "shleen-bur-converter", "name": "SHleen Bur Converter", "brand": "Shleen", "mrp": 300, "price": 250, "sale": true, "stock": "in_stock", "cats": ["covid-protection"], "primary": "covid-protection"}, {"slug": "shleen-eye-protection-goggles", "name": "SHleen Eye Protection Goggles", "brand": "Shleen", "mrp": 400, "price": 300, "sale": true, "stock": "in_stock", "cats": ["covid-protection"], "primary": "covid-protection"}, {"slug": "shleen-face-mask", "name": "SHleen Face Mask", "brand": "Shleen", "mrp": 300, "price": 200, "sale": true, "stock": "in_stock", "cats": ["covid-protection", "dental-disposables"], "primary": "covid-protection"}, {"slug": "shleen-latex-gloves", "name": "SHleen Latex Examination Gloves", "brand": "Shleen", "mrp": 695, "price": 595, "sale": true, "stock": "sold_out", "cats": ["covid-protection", "diagnostic", "dental-disposables"], "primary": "covid-protection"}, {"slug": "acry-lux-teeth-set", "name": "Acry Lux 3-Layered Teeth Set", "brand": "Ruthinium", "mrp": 1260, "price": 800, "sale": true, "stock": "in_stock", "cats": ["general-dentistry", "prosthodontics", "artificial-teeth-set"], "primary": "prosthodontics"}, {"slug": "acry-rock-teeth-set", "name": "Acryrock Teeth Set", "brand": "Ruthinium", "mrp": 448, "price": 350, "sale": true, "stock": "in_stock", "cats": ["general-dentistry", "prosthodontics", "artificial-teeth-set"], "primary": "prosthodontics"}, {"slug": "articulating-paper", "name": "Articulating Paper", "brand": "MDM", "mrp": null, "price": 50, "sale": false, "stock": "in_stock", "cats": ["prosthodontics"], "primary": "prosthodontics"}, {"slug": "coe-pak-periodontal-dressing", "name": "Coe-Pak Periodontal Dressing (Standard Kit)", "brand": "GC", "mrp": null, "price": 2825, "sale": false, "stock": "in_stock", "cats": ["prosthodontics"], "primary": "prosthodontics"}, {"slug": "shleen-bone-caliper", "name": "SHleen Bone Caliper SBC-02", "brand": "Shleen", "mrp": 2500, "price": 1800, "sale": true, "stock": "in_stock", "cats": ["diagnostic"], "primary": "diagnostic"}, {"slug": "fussen-intra-oral-sensor-rvg", "name": "Fussen Intra Oral Sensor (RVG)", "brand": "Fussen", "mrp": 85000, "price": 80000, "sale": true, "stock": "sold_out", "cats": ["diagnostic", "radiography"], "primary": "diagnostic"}, {"slug": "shleen-nitrile-gloves", "name": "SHleen Nitrile Examination Gloves", "brand": "Shleen", "mrp": 1395, "price": 1195, "sale": true, "stock": "sold_out", "cats": ["diagnostic"], "primary": "diagnostic"}, {"slug": "saddle-matrix-system", "name": "Saddle Matrix System", "brand": "Miscellaneous", "mrp": 2400, "price": 1200, "sale": true, "stock": "in_stock", "cats": ["dental-disposables"], "primary": "dental-disposables"}, {"slug": "shleen-shoe-covers", "name": "SHleen Disposable Shoe Covers (PP)", "brand": "Shleen", "mrp": 300, "price": 200, "sale": true, "stock": "sold_out", "cats": ["dental-disposables"], "primary": "dental-disposables"}, {"slug": "shleen-eye-protection-seg02", "name": "SHleen Eye Protection Goggles SEG 02", "brand": "Shleen", "mrp": null, "price": 300, "sale": false, "stock": "in_stock", "cats": ["dental-disposables"], "primary": "dental-disposables"}, {"slug": "shleen-matrix-bands", "name": "SHleen Matrix Bands", "brand": "Shleen", "mrp": null, "price": 100, "sale": false, "stock": "in_stock", "cats": ["dental-disposables"], "primary": "dental-disposables"}, {"slug": "shleen-psp-covers", "name": "SHleen PSP Covers", "brand": "Shleen", "mrp": 1800, "price": 1500, "sale": true, "stock": "in_stock", "cats": ["dental-disposables", "radiography"], "primary": "dental-disposables"}, {"slug": "shleen-rvg-sensor-sleeves", "name": "SHleen RVG Sensor Sleeves", "brand": "Shleen", "mrp": 800, "price": 500, "sale": true, "stock": "in_stock", "cats": ["dental-disposables", "radiography"], "primary": "dental-disposables"}, {"slug": "mani-flo-v", "name": "Mani Flo V (Flowable but Viscous Composite)", "brand": "MANI", "mrp": 1710, "price": 1240, "sale": true, "stock": "in_stock", "cats": ["surgical-dentistry"], "primary": "surgical-dentistry"}, {"slug": "shleen-surgical-gown", "name": "SHleen Surgical Cloth Gown SSG01", "brand": "Shleen", "mrp": 450, "price": 350, "sale": true, "stock": "in_stock", "cats": ["surgical-dentistry", "laboratory"], "primary": "surgical-dentistry"}, {"slug": "washable-ppe-gown-cap", "name": "Washable PPE Gown and Cap", "brand": "Shleen", "mrp": 1000, "price": 850, "sale": true, "stock": "in_stock", "cats": ["surgical-dentistry", "laboratory"], "primary": "surgical-dentistry"}, {"slug": "reinforcement-mesh", "name": "Reinforcement Mesh", "brand": "MAARC Dental", "mrp": null, "price": 800, "price_max": 1300, "sale": false, "stock": "in_stock", "cats": ["laboratory"], "primary": "laboratory"}, {"slug": "shellac-base-plate", "name": "Shellac Base Plate", "brand": "MAARC Dental", "mrp": 250, "price": 150, "sale": true, "stock": "in_stock", "cats": ["laboratory"], "primary": "laboratory"}]}</script>
+<script>
+const DATA = JSON.parse(document.getElementById('catalog-data').textContent);
+const { business, brands, categories, products } = DATA;
+
+const REDUCED_MOTION = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+// reusable scroll-reveal: fade + rise, once per element
+const HAS_IO = typeof IntersectionObserver === 'function';
+const revealObserver = HAS_IO ? new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('in');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold:0.12, rootMargin:'0px 0px -8% 0px' }) : null;
+
+function makeReveal(el, delayMs){
+  if(REDUCED_MOTION || !HAS_IO){ el.classList.add('reveal', 'in'); return; }
+  el.classList.add('reveal');
+  if(delayMs) el.style.transitionDelay = delayMs + 'ms';
+  revealObserver.observe(el);
+}
+
+function inr(n){
+  if(n === null || n === undefined) return '';
+  return '\u20B9' + Number(n).toLocaleString('en-IN');
+}
+function priceLabel(p){
+  if(p.price_max){ return inr(p.price) + ' \u2013 ' + inr(p.price_max); }
+  return inr(p.price);
+}
+
+// group products by primary category
+const byPrimary = {};
+products.forEach(p=>{
+  (byPrimary[p.primary] = byPrimary[p.primary] || []).push(p);
+});
+
+const verifiedWithProducts = categories.filter(c => (byPrimary[c.slug]||[]).length > 0);
+const compactCats = categories.filter(c => !(byPrimary[c.slug]||[]).length > 0);
+
+// ---- rail ----
+const railList = document.getElementById('rail-list');
+verifiedWithProducts.forEach((c,i)=>{
+  const li = document.createElement('li');
+  const btn = document.createElement('button');
+  btn.className = 'rail-btn';
+  btn.dataset.target = 'sec-' + c.slug;
+  btn.innerHTML = `<span class="num">${String(i+1).padStart(2,'0')}</span><span class="lbl">${c.name}</span><span class="ct">${c.count}</span>`;
+  btn.addEventListener('click', ()=>{
+    const target = document.getElementById('sec-'+c.slug);
+    if(target && target.scrollIntoView) target.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+  li.appendChild(btn);
+  railList.appendChild(li);
+});
+
+// ---- hero spec card ----
+const totalListed = categories.reduce((a,c)=>a+c.count,0);
+document.getElementById('spec-date').textContent = new Date().toLocaleDateString('en-IN',{month:'short', year:'numeric'});
+const specRows = [
+  ['Location', 'Ludhiana, Punjab'],
+  ['Categories', categories.length + ' ranges'],
+  ['Brands carried', brands.length + '+'],
+  ['SKUs listed', totalListed + '+ across site'],
+  ['Documented here', products.length + ' items'],
+  ['Free delivery', 'Orders over \u20B91,500'],
+  ['Hours', business.hours.map(h=>h.days+': '+h.time).join(' \u00b7 ')],
+];
+const specList = document.getElementById('spec-list');
+specRows.forEach(([k,v])=>{
+  const row = document.createElement('div');
+  row.className = 'spec-row';
+  row.innerHTML = `<dt>${k}</dt><dd>${v}</dd>`;
+  specList.appendChild(row);
+});
+
+// ---- category sections ----
+const catSections = document.getElementById('cat-sections');
+verifiedWithProducts.forEach((c,i)=>{
+  const items = byPrimary[c.slug] || [];
+  const section = document.createElement('section');
+  section.className = 'cat-section';
+  section.id = 'sec-' + c.slug;
+
+  const head = document.createElement('div');
+  head.className = 'cat-head';
+  head.innerHTML = `
+    <div>
+      <span class="num-tag">${String(i+1).padStart(2,'0')} / ${String(verifiedWithProducts.length).padStart(2,'0')}</span>
+      <h2>${c.name}</h2>
+      <p class="blurb">${c.blurb}</p>
+    </div>
+    <span class="cat-count">${c.count} in range \u00b7 ${items.length} documented</span>
+  `;
+  makeReveal(head);
+  section.appendChild(head);
+
+  const grid = document.createElement('div');
+  grid.className = 'product-grid';
+  items.forEach((p, pi)=>{
+    const card = document.createElement('article');
+    card.className = 'p-card';
+    let specsHtml = '';
+    if(p.specs){
+      specsHtml = '<ul class="p-specs">' + p.specs.map(s=>`<li>${s}</li>`).join('') + '</ul>';
+    }
+    let descHtml = p.description ? `<p class="p-desc">${p.description}</p>` : '';
+    card.innerHTML = `
+      <div class="p-top">
+        <span class="p-brand">${p.brand ? p.brand : 'House Stock'}</span>
+        ${p.tag ? `<span class="p-tag">${p.tag}</span>` : ''}
+      </div>
+      <h3 class="p-name">${p.name}</h3>
+      ${descHtml}
+      ${specsHtml}
+      <div class="p-bottom">
+        <span>
+          ${p.sale && p.mrp ? `<span class="p-mrp">${inr(p.mrp)}</span>` : ''}
+          <span class="p-price">${priceLabel(p)}</span>
+        </span>
+        <span class="p-stock ${p.stock==='in_stock' ? 'in' : 'out'}">${p.stock==='in_stock' ? 'In stock' : 'Sold out'}</span>
+      </div>
+    `;
+    makeReveal(card, (pi % 3) * 90);
+    grid.appendChild(card);
+  });
+  section.appendChild(grid);
+  catSections.appendChild(section);
+});
+
+// ---- compact "more" section ----
+const moreGrid = document.getElementById('more-grid');
+compactCats.forEach((c, i)=>{
+  const card = document.createElement('div');
+  card.className = 'more-card';
+  card.innerHTML = `
+    <div>
+      <h4>${c.name}</h4>
+      <p>${c.blurb}</p>
+    </div>
+    <span class="ct">${c.count} SKU${c.count===1?'':'s'}</span>
+  `;
+  makeReveal(card, (i % 2) * 90);
+  moreGrid.appendChild(card);
+});
+
+// ---- brands ----
+const brandGrid = document.getElementById('brand-grid');
+brands.forEach((b, i)=>{
+  const el = document.createElement('div');
+  el.className = 'brand-plate';
+  el.textContent = b;
+  makeReveal(el, (i % 5) * 60);
+  brandGrid.appendChild(el);
+});
+
+// ---- trust ----
+const trustGrid = document.getElementById('trust-grid');
+const trustCopy = [
+  ['Stocked, not drop-shipped', 'Fast-moving consumables ship same day from our Ludhiana counter.'],
+  ['Multi-brand sourcing', business.perks[1] + ' across ' + brands.length + '+ manufacturers, so you compare before you buy.'],
+  ['Order however suits you', 'Call, WhatsApp, or visit — quotes and stock checks handled directly, no cart required.'],
+];
+trustCopy.forEach(([h,p], i)=>{
+  const el = document.createElement('div');
+  el.className = 'trust-card';
+  el.innerHTML = `<h4>${h}</h4><p>${p}</p>`;
+  makeReveal(el, i * 90);
+  trustGrid.appendChild(el);
+});
+makeReveal(document.querySelector('.contact-card'));
+makeReveal(document.querySelector('.map-frame'), 120);
+
+// ---- contact ----
+const contactRows = document.getElementById('contact-rows');
+const rows = [
+  ['Address', business.address],
+  ['Phone', business.phones.join(' \u00b7 ')],
+  ['Email', business.email],
+  ['Hours', business.hours.map(h=>h.days+': '+h.time).join('<br>')],
+];
+rows.forEach(([k,v])=>{
+  const row = document.createElement('div');
+  row.className = 'contact-row';
+  row.innerHTML = `<span class="k">${k}</span><span class="v">${v}</span>`;
+  contactRows.appendChild(row);
+});
+
+// ---- footer ----
+const footerCats = document.getElementById('footer-cats');
+verifiedWithProducts.slice(0,8).forEach(c=>{
+  const li = document.createElement('li'); li.textContent = c.name; footerCats.appendChild(li);
+});
+const footerPolicies = document.getElementById('footer-policies');
+business.policies.forEach(p=>{
+  const li = document.createElement('li'); li.textContent = p; footerPolicies.appendChild(li);
+});
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// ---- header scroll shadow ----
+const headerEl = document.querySelector('.site-header');
+let lastScrollState = false;
+window.addEventListener('scroll', ()=>{
+  const shouldShadow = window.scrollY > 12;
+  if(shouldShadow !== lastScrollState){
+    headerEl.classList.toggle('scrolled', shouldShadow);
+    lastScrollState = shouldShadow;
+  }
+}, { passive:true });
+
+// ---- sliding rail indicator ----
+const railIndicator = document.getElementById('rail-indicator');
+function moveIndicatorTo(btn){
+  if(!railIndicator || !btn) return;
+  if(window.innerWidth <= 980){ railIndicator.style.opacity = 0; return; }
+  railIndicator.style.opacity = 1;
+  railIndicator.style.height = btn.offsetHeight + 'px';
+  railIndicator.style.transform = `translateY(${btn.parentElement.offsetTop}px)`;
+}
+
+// ---- scroll spy (drives active rail state + sliding indicator) ----
+const railBtns = Array.from(document.querySelectorAll('.rail-btn'));
+const sections = verifiedWithProducts.map(c=>document.getElementById('sec-'+c.slug));
+if(HAS_IO){
+  const spy = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      const id = entry.target.id;
+      const btn = railBtns.find(b=>b.dataset.target === id);
+      if(!btn) return;
+      if(entry.isIntersecting){
+        railBtns.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        moveIndicatorTo(btn);
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s=> s && spy.observe(s));
+}
+
+railBtns.forEach(btn=> btn.addEventListener('click', ()=> moveIndicatorTo(btn)));
+window.addEventListener('resize', ()=>{
+  const active = railBtns.find(b=>b.classList.contains('active')) || railBtns[0];
+  moveIndicatorTo(active);
+});
+if(railBtns[0]){
+  railBtns[0].classList.add('active');
+  requestAnimationFrame(()=> moveIndicatorTo(railBtns[0]));
+}
+
+// ---- count-up stats in the spec card ----
+function countUp(el, target, duration){
+  if(REDUCED_MOTION){ el.textContent = target.toLocaleString('en-IN'); return; }
+  const start = performance.now();
+  function tick(now){
+    const t = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(eased * target).toLocaleString('en-IN');
+    if(t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+document.querySelectorAll('#spec-list .spec-row dd').forEach(dd=>{
+  const m = dd.textContent.match(/^([\d,]+)(.*)$/);
+  if(!m) return;
+  const target = parseInt(m[1].replace(/,/g,''), 10);
+  const suffix = m[2];
+  dd.innerHTML = `<span class="count-num" data-target="${target}">0</span>${suffix}`;
+});
+const specCardEl = document.querySelector('.spec-card');
+if(HAS_IO && specCardEl){
+  const specObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.querySelectorAll('.count-num').forEach(el=>{
+          countUp(el, parseInt(el.dataset.target, 10), 900);
+        });
+        specObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold:0.3 });
+  specObserver.observe(specCardEl);
+} else {
+  document.querySelectorAll('.count-num').forEach(el=>{
+    el.textContent = parseInt(el.dataset.target, 10).toLocaleString('en-IN');
+  });
+}
+</script>
+</body>
+</html>
