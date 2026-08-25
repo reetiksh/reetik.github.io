@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Open APIs Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0284c7;
+            --accent-green: #4ade80;
+            --accent-purple: #c084fc;
+            --badge-bg: #334155;
+            --radius: 12px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        header {
+            max-width: 1350px;
+            margin: 0 auto 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 20px;
+        }
+
+        .header-title h1 {
+            font-size: 1.8rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        .btn-refresh-all {
+            background: linear-gradient(135deg, var(--accent), #6366f1);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        .btn-refresh-all:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            max-width: 1350px;
+            margin: 0 auto;
+        }
+
+        /* Card Component */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 240px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: #475569;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-badge {
+            background: var(--badge-bg);
+            color: var(--accent);
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-weight: 500;
+        }
+
+        .card-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .card-footer {
+            margin-top: 16px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        button.btn-icon {
+            background: var(--card-border);
+            border: none;
+            color: var(--text-main);
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        button.btn-icon:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        select.city-select {
+            background: #0f172a;
+            color: #fff;
+            border: 1px solid var(--card-border);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Widgets Custom Styling */
+        .weather-hero {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .weather-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .crypto-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .crypto-item {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .crypto-label { font-size: 0.75rem; color: var(--text-muted); }
+        .crypto-val { font-size: 1rem; font-weight: 600; color: var(--accent-green); }
+
+        .api-img {
+            max-width: 100%;
+            max-height: 140px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .user-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .quote-box {
+            font-style: italic;
+            color: #e2e8f0;
+            position: relative;
+        }
+
+        .quote-author {
+            margin-top: 6px;
+            font-style: normal;
+            font-weight: 600;
+            color: var(--accent-purple);
+            font-size: 0.85rem;
+        }
+
+        .loading-skeleton {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .error-msg {
+            color: #f87171;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>⚡ Public APIs Live Dashboard</h1>
+            <p>Direct live data streams from free, open-access public APIs</p>
+        </div>
+        <button class="btn-refresh-all" onclick="refreshAllWidgets()">↻ Refresh All Data</button>
+    </header>
+
+    <div class="dashboard-grid">
+
+        <!-- 1. Open-Meteo Weather Widget with City Selector (Delhi default) -->
+        <div class="card" style="border-left: 4px solid var(--accent);">
+            <div class="card-header">
+                <span class="card-title">🌦️ City Weather</span>
+                <div class="card-actions">
+                    <select id="weather-city-select" class="city-select" onchange="fetchWeather()">
+                        <option value="delhi" selected>Delhi</option>
+                        <option value="pune">Pune</option>
+                        <option value="ludhiana">Ludhiana</option>
+                    </select>
+                    <button class="btn-icon" onclick="fetchWeather()">↻</button>
+                </div>
+            </div>
+            <div class="card-body" id="weather-content">
+                <div class="loading-skeleton">Loading weather...</div>
+            </div>
+            <div class="card-footer">
+                <span>API: Open-Meteo</span>
+                <span id="weather-condition-tag">Forecast</span>
+            </div>
+        </div>
+
+        <!-- 2. Crypto Tracker (Binance) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">💰 Crypto Market</span>
+                <button class="btn-icon" onclick="fetchCrypto()">↻</button>
+            </div>
+            <div class="card-body" id="crypto-content">
+                <div class="loading-skeleton">Fetching prices...</div>
+            </div>
+            <div class="card-footer">
+                <span>API: Binance Public Ticker</span>
+                <span class="card-badge">Live USD</span>
+            </div>
+        </div>
+
+        <!-- 3. Forex Rates (Frankfurter) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">💱 Foreign Exchange</span>
+                <button class="btn-icon" onclick="fetchForex()">↻</button>
+            </div>
+            <div class="card-body" id="forex-content">
+                <div class="loading-skeleton">Loading exchange rates...</div>
+            </div>
+            <div class="card-footer">
+                <span>API: Frankfurter (ECB)</span>
+                <span class="card-badge">Base: 1 USD</span>
+            </div>
+        </div>
+
+        <!-- 4. PokéAPI (Pokémon Explorer) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">⚡ Pokémon Dex</span>
+                <button class="btn-icon" onclick="fetchPokemon()">↻</button>
+            </div>
+            <div class="card-body" id="pokemon-content">
+                <div class="loading-skeleton">Searching Pokémon...</div>
+            </div>
+            <div class="card-footer">
+                <span>API: PokéAPI</span>
+                <span class="card-badge">Gen 1-8</span>
+            </div>
+        </div>
+
+        <!-- 5. Random Dog Generator (Dog CEO) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">🐶 Random Canine</span>
+                <button class="btn-icon" onclick="fetchDog()">↻</button>
+            </div>
+            <div class="card-body" id="dog-content">
+                <div class="loading-skeleton">Fetching picture...</div>
+            </div>
+            <div class="card-footer">
+                <span>API: Dog CEO</span>
+                <span class="card-badge">Random</span>
+            </div>
+        </div>
+
+        <!-- 6. Random User Generator -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">👤 Identity Generator</span>
+                <button class="btn-icon" onclick="fetchUser()">↻</button>
+            </div>
+            <div class="card-body" id="user-content">
+                <div class="loading-skeleton">Generating profile...</div>
+            </div>
+            <div class="card-footer">
+                <span>API: RandomUser.me</span>
+                <span class="card-badge">Simulated</span>
+            </div>
+        </div>
+
+        <!-- 7. JokeAPI -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">😂 Dev & Misc Joke</span>
+                <button class="btn-icon" onclick="fetchJoke()">↻</button>
+            </div>
+            <div class="card-body" id="joke-content">
+                <div class="loading-skeleton">Fetching joke...</div>
+            </div>
+            <div class="card-footer">
+                <span>API: JokeAPI</span>
+                <span class="card-badge">Safe Mode</span>
+            </div>
+        </div>
+
+        <!-- 8. Cat Fact (CatFact.Ninja) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">🐱 Cat Fact</span>
+                <button class="btn-icon" onclick="fetchCatFact()">↻</button>
+            </div>
+            <div class="card-body" id="cat-content">
+                <div class="loading-skeleton">Fetching cat fact...</div>
+            </div>
+            <div class="card-footer">
+                <span>API: Catfact.ninja</span>
+                <span class="card-badge">Trivia</span>
+            </div>
+        </div>
+
+        <!-- 9. Daily Advice (Advice Slip) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">💡 Advice Slip</span>
+                <button class="btn-icon" onclick="fetchAdvice()">↻</button>
+            </div>
+            <div class="card-body" id="advice-content">
+                <div class="loading-skeleton">Seeking advice...</div>
+            </div>
+            <div class="card-footer">
+                <span>API: AdviceSlip</span>
+                <span class="card-badge">Wisdom</span>
+            </div>
+        </div>
+
+        <!-- 10. Country Info (REST Countries) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">🌍 Country Data</span>
+                <button class="btn-icon" onclick="fetchCountry()">↻</button>
+            </div>
+            <div class="card-body" id="country-content">
+                <div class="loading-skeleton">Fetching country info...</div>
+            </div>
+            <div class="card-footer">
+                <span>API: REST Countries</span>
+                <span class="card-badge">Global Data</span>
+            </div>
+        </div>
+
+        <!-- 11. English Dictionary (Free Dictionary API) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">📖 Word Definition</span>
+                <button class="btn-icon" onclick="fetchWord()">↻</button>
+            </div>
+            <div class="card-body" id="word-content">
+                <div class="loading-skeleton">Looking up vocabulary...</div>
+            </div>
+            <div class="card-footer">
+                <span>API: Free Dictionary API</span>
+                <span class="card-badge">English</span>
+            </div>
+        </div>
+
+        <!-- 12. Public IP Address (Ipify) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">🌐 Network / IP</span>
+                <button class="btn-icon" onclick="fetchIP()">↻</button>
+            </div>
+            <div class="card-body" id="ip-content">
+                <div class="loading-skeleton">Resolving IP...</div>
+            </div>
+            <div class="card-footer">
+                <span>API: Ipify</span>
+                <span class="card-badge">Client Public IP</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // City Coordinates mapping
+        const CITIES = {
+            delhi: { name: 'Delhi', lat: 28.6139, lon: 77.2090 },
+            pune: { name: 'Pune', lat: 18.5204, lon: 73.8567 },
+            ludhiana: { name: 'Ludhiana', lat: 30.9010, lon: 75.8573 }
+        };
+
+        // Weather interpretation helper
+        function getWeatherDesc(code) {
+            const map = {
+                0: 'Clear Sky ☀️',
+                1: 'Mainly Clear 🌤️',
+                2: 'Partly Cloudy ⛅',
+                3: 'Overcast ☁️',
+                45: 'Foggy 🌫️',
+                48: 'Depositing Rime Fog 🌫️',
+                51: 'Light Drizzle 🌦️',
+                61: 'Slight Rain 🌧️',
+                63: 'Moderate Rain 🌧️',
+                65: 'Heavy Rain ⛈️',
+                71: 'Slight Snow 🌨️',
+                95: 'Thunderstorm ⚡'
+            };
+            return map[code] || 'Fair';
+        }
+
+        // 1. Fetch Weather (Delhi, Pune, Ludhiana)
+        async function fetchWeather() {
+            const cityKey = document.getElementById('weather-city-select').value;
+            const city = CITIES[cityKey];
+            const container = document.getElementById('weather-content');
+            container.innerHTML = `<div class="loading-skeleton">Updating ${city.name}...</div>`;
+
+            try {
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current_weather=true`);
+                const data = await res.json();
+                const cur = data.current_weather;
+                const weatherText = getWeatherDesc(cur.weathercode);
+                
+                document.getElementById('weather-condition-tag').innerText = weatherText;
+
+                container.innerHTML = `
+                    <div class="weather-hero">${cur.temperature}°C</div>
+                    <div style="font-weight:600; margin-bottom:6px; color:#e2e8f0;">${city.name} - ${weatherText}</div>
+                    <div class="weather-meta">
+                        <span>💨 Wind: ${cur.windspeed} km/h</span>
+                        <span>🧭 Direction: ${cur.winddirection}°</span>
+                    </div>
+                `;
+            } catch (err) {
+                container.innerHTML = `<div class="error-msg">Failed to load weather.</div>`;
+            }
+        }
+
+        // 2. Fetch Crypto Prices (Binance)
+        async function fetchCrypto() {
+            const container = document.getElementById('crypto-content');
+            container.innerHTML = `<div class="loading-skeleton">Fetching prices...</div>`;
+            try {
+                const [btcRes, ethRes, solRes] = await Promise.all([
+                    fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT'),
+                    fetch('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT'),
+                    fetch('https://api.binance.com/api/v3/ticker/price?symbol=SOLUSDT')
+                ]);
+                const btc = await btcRes.json();
+                const eth = await ethRes.json();
+                const sol = await solRes.json();
+
+                container.innerHTML = `
+                    <div class="crypto-grid">
+                        <div class="crypto-item">
+                            <div class="crypto-label">BTC/USDT</div>
+                            <div class="crypto-val">$${parseFloat(btc.price).toLocaleString(undefined, {maximumFractionDigits: 2})}</div>
+                        </div>
+                        <div class="crypto-item">
+                            <div class="crypto-label">ETH/USDT</div>
+                            <div class="crypto-val">$${parseFloat(eth.price).toLocaleString(undefined, {maximumFractionDigits: 2})}</div>
+                        </div>
+                        <div class="crypto-item">
+                            <div class="crypto-label">SOL/USDT</div>
+                            <div class="crypto-val">$${parseFloat(sol.price).toLocaleString(undefined, {maximumFractionDigits: 2})}</div>
+                        </div>
+                        <div class="crypto-item">
+                            <div class="crypto-label">Status</div>
+                            <div class="crypto-val" style="color: var(--accent);">Live Ticker</div>
+                        </div>
+                    </div>
+                `;
+            } catch (err) {
+                container.innerHTML = `<div class="error-msg">Could not load crypto data.</div>`;
+            }
+        }
+
+        // 3. Fetch Foreign Exchange Rates (Frankfurter)
+        async function fetchForex() {
+            const container = document.getElementById('forex-content');
+            container.innerHTML = `<div class="loading-skeleton">Loading Forex rates...</div>`;
+            try {
+                const res = await fetch('https://api.frankfurter.dev/v1/latest?base=USD&symbols=INR,EUR,GBP,JPY');
+                const data = await res.json();
+                container.innerHTML = `
+                    <div class="crypto-grid">
+                        <div class="crypto-item">
+                            <div class="crypto-label">USD / INR</div>
+                            <div class="crypto-val">₹${data.rates.INR}</div>
+                        </div>
+                        <div class="crypto-item">
+                            <div class="crypto-label">USD / EUR</div>
+                            <div class="crypto-val">€${data.rates.EUR}</div>
+                        </div>
+                        <div class="crypto-item">
+                            <div class="crypto-label">USD / GBP</div>
+                            <div class="crypto-val">£${data.rates.GBP}</div>
+                        </div>
+                        <div class="crypto-item">
+                            <div class="crypto-label">USD / JPY</div>
+                            <div class="crypto-val">¥${data.rates.JPY}</div>
+                        </div>
+                    </div>
+                `;
+            } catch (err) {
+                container.innerHTML = `<div class="error-msg">Forex API unavailable.</div>`;
+            }
+        }
+
+        // 4. Fetch Pokemon (PokéAPI)
+        async function fetchPokemon() {
+            const container = document.getElementById('pokemon-content');
+            container.innerHTML = `<div class="loading-skeleton">Catching Pokémon...</div>`;
+            try {
+                const randomId = Math.floor(Math.random() * 151) + 1; // Gen 1
+                const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
+                const data = await res.json();
+                const name = data.name.toUpperCase();
+                const sprite = data.sprites.front_default;
+                const types = data.types.map(t => t.type.name).join(', ');
+                const hp = data.stats.find(s => s.stat.name === 'hp').base_stat;
+
+                container.innerHTML = `
+                    <img src="${sprite}" alt="${name}" style="width: 80px; height: 80px;">
+                    <div style="font-weight: 700; font-size: 1.1rem; color: var(--accent);">${name} (#${data.id})</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">Type: ${types} | HP: ${hp}</div>
+                `;
+            } catch (err) {
+                container.innerHTML = `<div class="error-msg">Failed to summon Pokémon.</div>`;
+            }
+        }
+
+        // 5. Fetch Random Dog (Dog CEO)
+        async function fetchDog() {
+            const container = document.getElementById('dog-content');
+            container.innerHTML = `<div class="loading-skeleton">Fetching good boy...</div>`;
+            try {
+                const res = await fetch('https://dog.ceo/api/breeds/image/random');
+                const data = await res.json();
+                container.innerHTML = `<img src="${data.message}" alt="Random Dog" class="api-img">`;
+            } catch (err) {
+                container.innerHTML = `<div class="error-msg">Dog image failed to load.</div>`;
+            }
+        }
+
+        // 6. Fetch Random User (RandomUser.me)
+        async function fetchUser() {
+            const container = document.getElementById('user-content');
+            container.innerHTML = `<div class="loading-skeleton">Creating person...</div>`;
+            try {
+                const res = await fetch('https://randomuser.me/api/');
+                const data = await res.json();
+                const user = data.results[0];
+                container.innerHTML = `
+                    <img src="${user.picture.medium}" alt="Profile" class="user-avatar">
+                    <div style="font-weight: 600;">${user.name.first} ${user.name.last}</div>
+                    <div style="color: var(--text-muted); font-size: 0.8rem;">${user.email}</div>
+                    <div style="color: var(--accent); font-size: 0.8rem; margin-top: 2px;">📍 ${user.location.city}, ${user.location.country}</div>
+                `;
+            } catch (err) {
+                container.innerHTML = `<div class="error-msg">User generator error.</div>`;
+            }
+        }
+
+        // 7. Fetch Joke (JokeAPI)
+        async function fetchJoke() {
+            const container = document.getElementById('joke-content');
+            container.innerHTML = `<div class="loading-skeleton">Writing punchline...</div>`;
+            try {
+                const res = await fetch('https://v2.jokeapi.dev/joke/Programming,Miscellaneous?safe-mode');
+                const data = await res.json();
+                if (data.type === 'twopart') {
+                    container.innerHTML = `
+                        <div style="font-weight:600; margin-bottom: 6px;">${data.setup}</div>
+                        <div style="color: var(--accent);">${data.delivery}</div>
+                    `;
+                } else {
+                    container.innerHTML = `<div>${data.joke}</div>`;
+                }
+            } catch (err) {
+                container.innerHTML = `<div class="error-msg">Joke failed to load.</div>`;
+            }
+        }
+
+        // 8. Fetch Cat Fact (Catfact.ninja)
+        async function fetchCatFact() {
+            const container = document.getElementById('cat-content');
+            container.innerHTML = `<div class="loading-skeleton">Feline trivia loading...</div>`;
+            try {
+                const res = await fetch('https://catfact.ninja/fact');
+                const data = await res.json();
+                container.innerHTML = `<div class="quote-box">"${data.fact}"</div>`;
+            } catch (err) {
+                container.innerHTML = `<div class="error-msg">Cat fact unavailable.</div>`;
+            }
+        }
+
+        // 9. Fetch Advice (Advice Slip)
+        async function fetchAdvice() {
+            const container = document.getElementById('advice-content');
+            container.innerHTML = `<div class="loading-skeleton">Seeking advice...</div>`;
+            try {
+                const res = await fetch(`https://api.adviceslip.com/advice?t=${new Date().getTime()}`);
+                const data = await res.json();
+                container.innerHTML = `<div class="quote-box">"${data.slip.advice}"</div>`;
+            } catch (err) {
+                container.innerHTML = `<div class="error-msg">Advice could not load.</div>`;
+            }
+        }
+
+        // 10. Fetch Country Data (REST Countries)
+        const countryList = ['India', 'Japan', 'Germany', 'Brazil', 'Canada', 'Australia'];
+        async function fetchCountry() {
+            const container = document.getElementById('country-content');
+            container.innerHTML = `<div class="loading-skeleton">Exploring nations...</div>`;
+            try {
+                const randomCountry = countryList[Math.floor(Math.random() * countryList.length)];
+                const res = await fetch(
+  'https://api.restcountries.com/countries/v5/codes.alpha_2/CA?pretty=1',
+  { headers: { 'Authorization': 'Bearer rc_live_demo' } }
+);
+                const [data] = await res.json();
+                const currencyKey = Object.keys(data.currencies)[0];
+
+                container.innerHTML = `
+                    <div style="font-size: 2rem; margin-bottom: 4px;">${data.flag.url_png}</div>
+                    <div style="font-weight: 700; font-size: 1.1rem;">${data.names.common}</div>
+                    // <div style="font-size: 0.85rem; color: var(--text-muted);">
+                    //     Capital: <b>${data.capital?.[0] || 'N/A'}</b> | Population: <b>${(data.population / 1e6).toFixed(1)}M</b>
+                    // </div>
+                    // <div style="font-size: 0.8rem; color: var(--accent); margin-top: 2px;">
+                    //     Currency: ${data.currencies[currencyKey].name} (${data.currencies[currencyKey].symbol})
+                    // </div>
+                `;
+            } catch (err) {
+                container.innerHTML = `<div class="error-msg">Country data unavailable.</div>`;
+            }
+        }
+
+        // 11. Fetch Dictionary Word (Free Dictionary API)
+        const sampleWords = ['serendipity', 'resilience', 'ephemeral', 'luminescence', 'eloquent', 'aurora'];
+        async function fetchWord() {
+            const container = document.getElementById('word-content');
+            container.innerHTML = `<div class="loading-skeleton">Consulting dictionary...</div>`;
+            try {
+                const word = sampleWords[Math.floor(Math.random() * sampleWords.length)];
+                const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+                const [data] = await res.json();
+                const meaning = data.meanings[0].definitions[0].definition;
+                const part = data.meanings[0].partOfSpeech;
+
+                container.innerHTML = `
+                    <div style="font-weight: 700; font-size: 1.2rem; color: var(--accent);">${data.word}</div>
+                    <div style="font-size: 0.8rem; color: var(--accent-purple); margin-bottom: 6px;">[${part}] ${data.phonetic || ''}</div>
+                    <div style="font-size: 0.85rem; color: #cbd5e1;">"${meaning}"</div>
+                `;
+            } catch (err) {
+                container.innerHTML = `<div class="error-msg">Dictionary lookup failed.</div>`;
+            }
+        }
+
+        // 12. Fetch Client Public IP (Ipify)
+        async function fetchIP() {
+            const container = document.getElementById('ip-content');
+            container.innerHTML = `<div class="loading-skeleton">Finding IP address...</div>`;
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                container.innerHTML = `
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">YOUR PUBLIC IP</div>
+                    <div style="font-size: 1.4rem; font-weight: 700; color: var(--accent-green);">${data.ip}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Protocol: IPv4 / Public Gateway</div>
+                `;
+            } catch (err) {
+                container.innerHTML = `<div class="error-msg">IP resolution failed.</div>`;
+            }
+        }
+
+        // Trigger All
+        function refreshAllWidgets() {
+            fetchWeather();
+            fetchCrypto();
+            fetchForex();
+            fetchPokemon();
+            fetchDog();
+            fetchUser();
+            fetchJoke();
+            fetchCatFact();
+            fetchAdvice();
+            fetchCountry();
+            fetchWord();
+            fetchIP();
+        }
+
+        window.onload = refreshAllWidgets;
+    </script>
+</body>
+</html>
